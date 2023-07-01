@@ -1,5 +1,5 @@
-type Product = {
-    title: string,
-    description: string,
-    price: string
+interface IProduct {
+    title: string;
+    description?: string;
+    price: number;
 }

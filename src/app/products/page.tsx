@@ -1,22 +1,23 @@
 'use client'
 
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import SessionLayout from '../components/SessionLayout'
 import axios from 'axios';
 
 export default function Products() {
-    const [title, setTitle] = useState<string>();
-    const [description, setDescription] = useState<string>();
-    const [price, setPrice] = useState<string>();
+    const [title, setTitle] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+    const [price, setPrice] = useState<string>('');
 
-    const createProduct = async () => {
+    const createProduct = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         const data = { title, description, price };
         await axios.post('/api/products', data);
     }
 
     return (
         <SessionLayout>
-            <form onSubmit={createProduct} className='flex flex-col'>
+            <form onSubmit={e => createProduct(e)} className='flex flex-col'>
                 <h1>New Product</h1>
                 <label>Product Name</label>
                 <input 
