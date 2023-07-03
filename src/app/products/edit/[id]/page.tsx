@@ -2,21 +2,20 @@
 
 'use client'
 
-import SessionLayout from '@/app/components/SessionLayout';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import ProductForm from '@/app/components/ProductForm';
 import { useEffect, useState } from 'react';
 
 type Params = {
-     params: { id: string }
+    params: { id: string }
 }
 
 // TODO: generate static params
 
 export default async function EditProduct({ params: { id } }: Params) {
     const router = useRouter();
-    const [productInfo, setProductInfo ] = useState<IProduct>();
+    const [productInfo, setProductInfo] = useState<IProduct>();
 
     // get the product from db with id
     useEffect(() => {
@@ -32,11 +31,12 @@ export default async function EditProduct({ params: { id } }: Params) {
     }
 
     return (
-        <SessionLayout>
+        <>
             <h1>Edit Product</h1>
-            {productInfo &&
+            {
+                productInfo &&
                 <ProductForm onSubmit={editProduct} populate={productInfo} />
             }
-        </SessionLayout>
+        </>
     )
 }
