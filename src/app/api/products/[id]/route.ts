@@ -17,3 +17,16 @@ export async function GET(req: NextRequest, { params: { id }}: Params ) {
     
     return NextResponse.json(product);
 }
+
+
+export async function DELETE(req: NextRequest, { params: { id }}: Params) {
+    await mongooseConnect();
+    console.log('wants to delete');
+    try {
+        await Product.findOneAndDelete({ _id: id });
+    } catch (error) {
+        return NextResponse.json({ error }, { status: 500 });
+    }
+
+    return new NextResponse();
+}

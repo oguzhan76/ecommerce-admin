@@ -22,6 +22,18 @@ label {
   @apply bg-cyan-900 text-white px-4 py-1 rounded-md w-20
 }
 
+.btn-default, .btn-red {
+  @apply text-white px-4 py-1 rounded-md;
+}
+
+.btn-default {
+  @apply bg-gray-500;
+}
+
+.btn-red {
+  @apply bg-red-800 ;
+}
+
 table.basic{
   @apply w-full
 }
@@ -29,13 +41,17 @@ table.basic{
 table.basic tr {
   @apply min-h-fit;
 }
-
+ /* slate-300
+    teal-100
+    zinc-300
+ */
 table.basic thead tr td {
-  @apply bg-teal-100;
+  /* @apply bg-teal-100; */
+  @apply bg-sky-200;
 }
 
 table.basic tr td{
-  @apply border border-teal-100;
+  @apply border border-sky-200;
 }
 
 table.basic a{
