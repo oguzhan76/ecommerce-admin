@@ -6,7 +6,7 @@ import { mongooseConnect } from '@/lib/mongoose';
 
 // Create product
 export async function POST(req: NextRequest) {
-    const product: IProduct = await req.json(); 
+    const product: IProduct = await req.json();
     await mongooseConnect();
     const newProduct: HydratedDocument<IProductDoc> = new Product(product)
     await newProduct.save();

@@ -15,7 +15,7 @@ h1 {
 }
 
 label {
-  @apply text-cyan-900
+  @apply text-cyan-900 mt-2;
 }
 
 .btn-primary {

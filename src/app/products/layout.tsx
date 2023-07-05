@@ -1,3 +1,4 @@
+import "@uploadthing/react/styles.css";
 import SessionLayout from '@/app/components/SessionLayout'
 import React from 'react'
 

@@ -35,7 +35,7 @@ export default async function EditProduct({ params: { id } }: Params) {
             <h1>Edit Product</h1>
             {
                 productInfo &&
-                <ProductForm onSubmit={editProduct} populate={productInfo} />
+                <ProductForm onSubmit={editProduct} productInfo={productInfo} />
             }
         </>
     )

@@ -9,7 +9,10 @@ const ModelSchema = new Schema<IProduct>({
     price: {
         type: Number,
         required: true
-    }
+    },
+    images: [{
+        type: String,
+    }]
 });
 
 export const Product = models.Product || model<IProduct>('Product', ModelSchema)

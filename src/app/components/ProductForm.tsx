@@ -1,18 +1,31 @@
-import { useState, FormEvent, useEffect } from 'react'
+import { useState, FormEvent } from 'react'
+import { UploadButton } from '@/lib/uploadthing';
 
 type Props = {
     onSubmit: (p: IProduct) => void,
-    populate?: IProduct
+    productInfo?: IProduct
 }
 
-export default function ProductForm({ onSubmit, populate }: Props) {
-    const [title, setTitle] = useState<string>(populate?.title || '');
-    const [description, setDescription] = useState<string>(populate?.description || '');
-    const [price, setPrice] = useState<string>(populate?.price.toString() || '');
+// delete uploaded images if user exits page without saving the product
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement> ) => {
+export default function ProductForm({ onSubmit, productInfo }: Props) {
+    const [title, setTitle] = useState<string>(productInfo?.title || '');
+    const [description, setDescription] = useState<string>(productInfo?.description || '');
+    const [price, setPrice] = useState<string>(productInfo?.price.toString() || '');
+    const [images, setImages] = useState<string[]>(productInfo?.images || []);
+    const [stagedImages, setStagedImages] = useState<{ fileUrl: string, fileKey: string }[]>([]);
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        onSubmit({title, description, price: parseInt(price) });
+        
+        const imgs = images.concat(stagedImages.map(img => img.fileUrl));
+
+        onSubmit({
+            title,
+            description,
+            price: parseInt(price),
+            images: imgs
+        });
     }
 
     return (
@@ -24,6 +37,29 @@ export default function ProductForm({ onSubmit, populate }: Props) {
                 value={title}
                 onChange={e => setTitle(e.target.value)}
             />
+
+            <label>Photos</label>
+            {images.length
+                ? <ImageList images={images} />
+                : <div className='text-sm text-red-500 italic'>No photos in this product</div>
+            }
+            <UploadButton
+                endpoint='imageUploader'
+                onClientUploadComplete={(res) => {
+                    if (res) setStagedImages(res)
+                }}
+                onUploadError={(err: Error) => alert(`ERROR! ${err.message}`)}
+            />
+            {!!stagedImages.length &&
+                <section>
+                    <div>
+                        <p>UploadComplete!</p>
+                        <p className='mt-2' >{stagedImages.length} staged files</p>
+                    </div>
+                    <ImageList images={stagedImages.map(img => img.fileUrl)} />
+                </section>
+            }
+
             <label>Description</label>
             <textarea
                 placeholder='description'
@@ -37,7 +73,21 @@ export default function ProductForm({ onSubmit, populate }: Props) {
                 value={price}
                 onChange={e => setPrice(e.target.value)}
             />
-            <button type='submit' className='btn-primary'>Save</button>
+            <button type='submit' className='btn-primary mt-2'>Save</button>
         </form>
+    )
+}
+
+function ImageList({ images }: { images: string[] }) {
+    return (
+        <ul className='flex gap-2 flex-wrap'>
+            {images.map(img =>
+                <li key={img}>
+                    <div className='w-24 h-24 rounded-lg overflow-hidden'>
+                        <img alt='product image' src={img} className='rounded-lg' />
+                    </div>
+                </li>
+            )}
+        </ul>
     )
 }
