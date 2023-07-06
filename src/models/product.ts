@@ -10,9 +10,12 @@ const ModelSchema = new Schema<IProduct>({
         type: Number,
         required: true
     },
-    images: [{
-        type: String,
-    }]
+    images: [
+        {
+            fileKey: String,
+            fileUrl: String
+        }
+    ]
 });
 
 export const Product = models.Product || model<IProduct>('Product', ModelSchema)
