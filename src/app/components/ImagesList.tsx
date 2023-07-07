@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { ReactSortable } from 'react-sortablejs'; //causes multiple renders onclick!
 
@@ -49,11 +50,18 @@ export default function ImagesList({ images, setImages }: Props) {
             {list.map(item => (
                 <div
                     key={item.id}
-                    className='relative w-24 h-24 rounded-lg overflow-hidden'
+                    className='relative w-20 h-20 rounded-lg'
                     onMouseDown={updateClickPos}
                     onMouseUp={(e)=> {if(isSelectClick(e))  onSelectItem(item) }}
                 >
-                    <img alt='product image' src={item.fileUrl} className='rounded-lg z-0' />
+                    <Image 
+                        fill={true} 
+                        quality={10}
+                        sizes='10vw'
+                        alt='product image' 
+                        src={item.fileUrl} 
+                        className='rounded-lg z-0 h-full object-cover' 
+                    />
                     {item.selected && <>
                         <div className='w-24 h-24 left-0 top-0 absolute bg-black bg-opacity-30 z-10'>
                         </div>
