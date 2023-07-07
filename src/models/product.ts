@@ -7,12 +7,16 @@ const ModelSchema = new Schema<IProduct>({
     },
     description: String,
     price: {
-        type: Number,
+        type: String,
         required: true
     },
     images: [
         {
-            fileKey: String,
+            _id: false,
+            fileKey: {
+                type: String,
+                required: true
+            },
             fileUrl: String
         }
     ]

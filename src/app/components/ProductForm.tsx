@@ -8,17 +8,13 @@ type Props = {
     productInfo?: IProduct
 }
 
-// TODO: delete uploaded images if user exits page without saving the product
-// TODO: upload progress bar maybe
-
-
 export default function ProductForm({ onSubmit, productInfo }: Props) {
     const [title, setTitle] = useState<string>(productInfo?.title || '');
     const [description, setDescription] = useState<string>(productInfo?.description || '');
-    const [price, setPrice] = useState<string>(productInfo?.price.toString() || '');
+    const [price, setPrice] = useState<string>(productInfo?.price || '');
     const [images, setImages] = useState<ISelectableImage[]>(productInfo?.images || []);
     const [stagedImages, setStagedImages] = useState<ISelectableImage[]>([]);
-
+    
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const imgs : IImageType[] = images.concat(stagedImages)
@@ -26,7 +22,7 @@ export default function ProductForm({ onSubmit, productInfo }: Props) {
         const productData = {
             title,
             description,
-            price: parseInt(price),
+            price,
             images: imgs
         }
         onSubmit(productData);
