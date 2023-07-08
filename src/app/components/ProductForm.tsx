@@ -2,6 +2,8 @@ import { useState, FormEvent, useEffect } from 'react'
 import { UploadButton } from '@/lib/uploadthing';
 import ImagesList from './ImagesList';
 import Link from 'next/link';
+import axios from 'axios';
+import useOnComponentUnmounts from '../hooks/useOnComponentUnmounts';
 
 type Props = {
     onSubmit: (p: IProduct) => void,
@@ -14,7 +16,16 @@ export default function ProductForm({ onSubmit, productInfo }: Props) {
     const [price, setPrice] = useState<string>(productInfo?.price || '');
     const [images, setImages] = useState<ISelectableImage[]>(productInfo?.images || []);
     const [stagedImages, setStagedImages] = useState<ISelectableImage[]>([]);
-    
+    useOnComponentUnmounts<IImageType[]>(deleteFiles, stagedImages);
+
+    // Callback function to be used in useOnComponentUnmounts hook.
+    function deleteFiles(data: IImageType[]) {
+        if(!data.length) return;
+        const fileKeys = data.map(img => img.fileKey);
+        axios.put('/api/products', fileKeys).then((res) => console.log(res));
+        setStagedImages([]);
+    }
+
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const imgs : IImageType[] = images.concat(stagedImages)
@@ -47,14 +58,15 @@ export default function ProductForm({ onSubmit, productInfo }: Props) {
                 <UploadButton
                     endpoint='imageUploader'
                     onClientUploadComplete={(res) => {
-                        if (res) setStagedImages(prev => prev.concat(res));
+                        if (res) {
+                            console.log('upload complete')
+                            setStagedImages(prev => prev.concat(res))};
                     }}
                     onUploadError={(err: Error) => alert(`ERROR! ${err.message}`)}
                 />
                 {!!stagedImages.length &&
                     <section>
                         <div>
-                            <p>Upload Complete!</p>
                             <p className='mt-2' >{stagedImages.length} staged files</p>
                         </div>
                         <ImagesList images={stagedImages} setImages={setStagedImages}/>

@@ -2,7 +2,7 @@ import { HydratedDocument } from 'mongoose';
 import { NextRequest, NextResponse } from "next/server";
 import { Product } from '@/models/product';
 import { mongooseConnect } from '@/lib/mongoose';
-
+import { utapi } from 'uploadthing/server';
 
 // Create product
 export async function POST(req: NextRequest) {
@@ -31,4 +31,14 @@ export async function PATCH(req: NextRequest) {
         return NextResponse.json({ error: 'Database Error'}, { status: 500});
 
     return NextResponse.json(updatedProduct);
+}
+
+// Instead of DELETE; It has a bug: json() doesn't work in DELETE
+export async function PUT(req: NextRequest) {
+    const files = await req.json();
+    console.log(files);
+    const res = await utapi.deleteFiles(files);
+    if(res.success)
+        return NextResponse.json('Deleted successfully');
+    return NextResponse.json('delete was unsuccessful');
 }

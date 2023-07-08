@@ -63,19 +63,21 @@ export default function ImagesList({ images, setImages }: Props) {
                         className='rounded-lg z-0 h-full object-cover' 
                     />
                     {item.selected && <>
-                        <div className='w-24 h-24 left-0 top-0 absolute bg-black bg-opacity-30 z-10'>
+                        <div className='w-20 h-20 left-0 top-0 rounded-lg absolute bg-black bg-opacity-30 z-10'>
                         </div>
-                        <div className='absolute left-8 top-8 text-slate-200 z-20 bg-none'>
+                        <div className='absolute left-0 top-0 w-full h-full text-slate-200 z-20 bg-none flex justify-center items-center'> 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
                     </>}
-                    <button className="absolute top-1 left-16 text-gray-200 hover:scale-125">
+                    <div className='absolute left-0 top-0 w-full h-full flex justify-end items-start'>
+                    <button className="text-gray-200 hover:scale-125">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3.5} stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
+                    </div>
                 </div>
             ))}
         </ReactSortable>
