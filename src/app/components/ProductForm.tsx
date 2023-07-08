@@ -16,17 +16,20 @@ export default function ProductForm({ onSubmit, productInfo }: Props) {
     const [price, setPrice] = useState<string>(productInfo?.price || '');
     const [images, setImages] = useState<SelectableImage[]>(productInfo?.images || []);
     const [stagedImages, setStagedImages] = useState<SelectableImage[]>([]);
-    useOnComponentUnmounts<ImageType[]>(deleteFiles, stagedImages);
+    const [saving, setSaving] = useState<boolean>(false);
+    useOnComponentUnmounts<ImageType[]>(deleteStagedImages, stagedImages);
+
 
     // Callback function to be used in useOnComponentUnmounts hook.
-    function deleteFiles(data: ImageType[]) {
-        if(!data.length) return;
+    function deleteStagedImages(data: ImageType[]) {
+        if(!data.length || saving) return;
         const fileKeys = data.map(img => img.fileKey);
         axios.put('/api/products', fileKeys).then((res) => console.log(res));
     }
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setSaving(true);
         const imgs : ImageType[] = images.concat(stagedImages)
 
         const productData = {

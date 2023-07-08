@@ -20,11 +20,17 @@ export default function DeleteProductPage({ params: { id } }: Params) {
         })
     }, [id]);
 
+
+    // WIP
     async function deleteItem() {
-        const res = await axios.delete(`/api/products/${id}`);
-        if (res.statusText === "OK") {
-            router.replace('/products');
-        }
+        const mongo = axios.delete(`/api/products/${id}`);
+        // const ut = axios.put('api/products/', productInfo?.images?.map(item => item.fileKey));
+        
+        // Promise.all([mongo, ut]).then(values => console.log(values));
+
+        // if (res.statusText === "OK") {
+        //     router.replace('/products');
+        // }
     }
 
     return (
