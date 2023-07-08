@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function Products() {
-  const [products, setProducts] = useState<IProductDoc[]>([]);
+  const [products, setProducts] = useState<ProductDoc[]>([]);
   const router = useRouter();
 
   useEffect(() => {

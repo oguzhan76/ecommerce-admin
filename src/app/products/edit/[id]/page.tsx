@@ -15,7 +15,7 @@ type Params = {
 
 export default async function EditProduct({ params: { id } }: Params) {
     const router = useRouter();
-    const [productInfo, setProductInfo] = useState<IProduct>();
+    const [productInfo, setProductInfo] = useState<Product>();
 
     // get the product from db with id
     useEffect(() => {
@@ -24,8 +24,8 @@ export default async function EditProduct({ params: { id } }: Params) {
         })
     }, [id]);
 
-    const editProduct = async (productData: IProduct) => {
-        const updatedProduct: IProductDoc = { _id: id, ...productData };
+    const editProduct = async (productData: Product) => {
+        const updatedProduct: ProductDoc = { _id: id, ...productData };
         const res = await axios.patch('/api/products/', updatedProduct);
         router.push('/products');
     }

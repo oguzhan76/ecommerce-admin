@@ -3,13 +3,13 @@ import { useState, useEffect, useRef } from 'react';
 import { ReactSortable } from 'react-sortablejs'; //causes multiple renders onclick!
 
 
-interface ItemType extends ISelectableImage {
+interface ItemType extends SelectableImage {
     id: number // Required by ReactSortable
 }
 
 type Props = {
-    images: ISelectableImage[],
-    setImages?: (imgs: ISelectableImage[]) => void
+    images: SelectableImage[],
+    setImages?: (imgs: SelectableImage[]) => void
 }
 
 export default function ImagesList({ images, setImages }: Props) {

@@ -10,7 +10,7 @@ type Params = {
 
 export async function GET(req: NextRequest, { params: { id }}: Params ) {
     await mongooseConnect();
-    const product: IProductDoc | null = await Product.findOne({ _id: id});
+    const product: ProductDoc | null = await Product.findOne({ _id: id});
     
     if(!product)
         return NextResponse.json({ error: 'Could not find product item.'}, { status: 500 });

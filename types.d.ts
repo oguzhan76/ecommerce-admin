@@ -1,19 +1,19 @@
-interface IProduct {
+interface Product {
     title: string;
     description?: string;
     price: string;
-    images?: IImageType[]
+    images?: ImageType[]
 }
 
-interface IProductDoc extends IProduct {
+interface ProductDoc extends Product {
     _id: string
 }
 
-interface IImageType {
+interface ImageType {
     fileKey: string,
     fileUrl: string
 }
 
-interface ISelectableImage extends IImageType {
+interface SelectableImage extends ImageType {
     selected?: boolean
 }

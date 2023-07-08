@@ -10,7 +10,7 @@ type Params = {
 
 export default function DeleteProductPage({ params: { id } }: Params) {
     const router = useRouter();
-    const [productInfo, setProductInfo] = useState<IProductDoc>();
+    const [productInfo, setProductInfo] = useState<ProductDoc>();
 
     // TODO handle errors
 

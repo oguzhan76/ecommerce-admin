@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-const ModelSchema = new Schema<IProduct>({
+const ModelSchema = new Schema<Product>({
     title: {
         type: String,
         required: true
@@ -22,4 +22,4 @@ const ModelSchema = new Schema<IProduct>({
     ]
 });
 
-export const Product = models.Product || model<IProduct>('Product', ModelSchema)
+export const Product = models.Product || model<Product>('Product', ModelSchema)

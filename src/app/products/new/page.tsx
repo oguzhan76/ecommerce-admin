@@ -9,7 +9,7 @@ import ProductForm from '@/app/components/ProductForm';
 export default function NewProduct() {
     const router = useRouter();
 
-    const createProduct = async (productData: IProduct) => {
+    const createProduct = async (productData: Product) => {
         await axios.post('/api/products', productData);
         router.push('/products');
     }

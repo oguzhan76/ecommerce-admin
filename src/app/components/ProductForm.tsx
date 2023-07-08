@@ -6,29 +6,28 @@ import axios from 'axios';
 import useOnComponentUnmounts from '../hooks/useOnComponentUnmounts';
 
 type Props = {
-    onSubmit: (p: IProduct) => void,
-    productInfo?: IProduct
+    onSubmit: (p: Product) => void,
+    productInfo?: Product
 }
 
 export default function ProductForm({ onSubmit, productInfo }: Props) {
     const [title, setTitle] = useState<string>(productInfo?.title || '');
     const [description, setDescription] = useState<string>(productInfo?.description || '');
     const [price, setPrice] = useState<string>(productInfo?.price || '');
-    const [images, setImages] = useState<ISelectableImage[]>(productInfo?.images || []);
-    const [stagedImages, setStagedImages] = useState<ISelectableImage[]>([]);
-    useOnComponentUnmounts<IImageType[]>(deleteFiles, stagedImages);
+    const [images, setImages] = useState<SelectableImage[]>(productInfo?.images || []);
+    const [stagedImages, setStagedImages] = useState<SelectableImage[]>([]);
+    useOnComponentUnmounts<ImageType[]>(deleteFiles, stagedImages);
 
     // Callback function to be used in useOnComponentUnmounts hook.
-    function deleteFiles(data: IImageType[]) {
+    function deleteFiles(data: ImageType[]) {
         if(!data.length) return;
         const fileKeys = data.map(img => img.fileKey);
         axios.put('/api/products', fileKeys).then((res) => console.log(res));
-        setStagedImages([]);
     }
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const imgs : IImageType[] = images.concat(stagedImages)
+        const imgs : ImageType[] = images.concat(stagedImages)
 
         const productData = {
             title,
