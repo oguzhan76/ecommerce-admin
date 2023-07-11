@@ -2,6 +2,8 @@ import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { ReactSortable } from 'react-sortablejs'; //causes multiple renders onclick!
 
+const SELECT_MARGIN = 7;
+
 
 interface ItemType extends SelectableImage {
     id: number // Required by ReactSortable
@@ -29,7 +31,8 @@ export default function ImagesList({ images, setImages }: Props) {
 
     function isSelectClick(e: React.MouseEvent<HTMLDivElement>): boolean {
         if (e.button !== 0) return false;
-        if (e.screenX === mousePos.current.x && e.screenY === mousePos.current.y) {
+        if(Math.abs(e.screenX - mousePos.current.x ) < SELECT_MARGIN 
+        && Math.abs(e.screenY - mousePos.current.y) < SELECT_MARGIN){
             return true;
         }
         return false;
@@ -56,7 +59,6 @@ export default function ImagesList({ images, setImages }: Props) {
                 >
                     <Image 
                         fill={true} 
-                        quality={10}
                         sizes='10vw'
                         alt='product image' 
                         src={item.fileUrl} 

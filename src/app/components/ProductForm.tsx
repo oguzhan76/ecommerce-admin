@@ -1,5 +1,5 @@
-import { useState, FormEvent, useEffect } from 'react'
-import { UploadButton } from '@/lib/uploadthing';
+import { useState, FormEvent } from 'react'
+import { UploadDropzone } from '@/lib/uploadthing';
 import ImagesList from './ImagesList';
 import Link from 'next/link';
 import axios from 'axios';
@@ -57,7 +57,7 @@ export default function ProductForm({ onSubmit, productInfo }: Props) {
                     ? <ImagesList images={images} setImages={setImages}/>
                     : <div className='text-sm text-red-500 italic'>No photos in this product</div>
                 }
-                <UploadButton
+                <UploadDropzone
                     endpoint='imageUploader'
                     onClientUploadComplete={(res) => {
                         if (res) {
