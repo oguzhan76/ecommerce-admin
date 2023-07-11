@@ -17,7 +17,7 @@ export default function NewProduct() {
     return (
         <>
             <h1>New Product</h1>
-            <ProductForm onSubmit={createProduct}/>
+            <ProductForm editProduct={createProduct}/>
         </>
     )
 }
