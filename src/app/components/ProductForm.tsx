@@ -2,7 +2,7 @@ import { useState, FormEvent } from 'react'
 import { UploadDropzone } from '@/lib/uploadthing';
 import ImagesList from './ImagesList';
 import Link from 'next/link';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import useOnComponentUnmounts from '../hooks/useOnComponentUnmounts';
 
 type Props = {
@@ -19,18 +19,20 @@ export default function ProductForm({ editProduct, productInfo }: Props) {
     const [saving, setSaving] = useState<boolean>(false);
     useOnComponentUnmounts<ImageType[]>(deleteStagedFiles, stagedImages);
 
-    console.log('images,', images);
-
     // Callback function to be used in useOnComponentUnmounts hook.
-    function deleteStagedFiles(data: ImageType[]) {
+    async function deleteStagedFiles(data: ImageType[]) {
         if (!data.length || saving) return;
         const fileKeys = data.map(img => img.fileKey);
-        axios.put('/api/products', fileKeys).then((res) => console.log(res));
+        try {
+            await axios.put('/api/products', fileKeys);
+        } catch (error) {
+            console.error(error.response.data.message);
+        }
     }
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // to prevent deleteStagedImages to delete images
+        // to prevent deleteStagedImages to delete images when saving
         setSaving(true);
         const imgs: ImageType[] = images.concat(stagedImages)
         const productData = {
@@ -43,11 +45,13 @@ export default function ProductForm({ editProduct, productInfo }: Props) {
         editProduct(productData);
     }
 
-    function deleteSelectedImages() {
-        const imagesToDelete = images.filter(item => item.selected);
-        const fileKeys = imagesToDelete.map(img => img.fileKey);
-        const db = axios.put('/api/products', fileKeys);
+    async function deleteSelectedImages() {
+        // Delete from uploadthing
+        const imagesToDelete: SelectableImage[] = images.filter(item => item.selected);
+        const fileKeys: string[] = imagesToDelete.map(img => img.fileKey);
+        const db: Promise<AxiosResponse> = axios.put('/api/products', fileKeys);
 
+        // Update the product in the database
         const temp = images.filter(item => !item.selected);
         setImages([...temp]);
         const productData = {
@@ -57,15 +61,13 @@ export default function ProductForm({ editProduct, productInfo }: Props) {
             price,
             images: temp
         };
-        const ut = axios.patch('/api/products/', productData);
+        const ut: Promise<AxiosResponse> = axios.patch('/api/products/', productData);
 
-        
-        Promise.all([db, ut]).then(responses => {
-            responses.forEach(res =>  {
-                if (res.statusText !== "OK") 
-                    alert(res.data);
-            });
-        });
+        try {
+            await Promise.all([db, ut])
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     function deleteSelectedStagedImages() {
@@ -96,7 +98,7 @@ export default function ProductForm({ editProduct, productInfo }: Props) {
                             setStagedImages(prev => prev.concat(res))
                         };
                     }}
-                    onUploadError={(err: Error) => alert(`ERROR! ${err.message}`)}
+                    onUploadError={(err: Error) => console.log(err)}
                 />
                 {!!stagedImages.length &&
                     <section>

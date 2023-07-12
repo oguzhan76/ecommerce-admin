@@ -1,44 +1,56 @@
+import { mongooseConnect } from '@/lib/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { NextRequest, NextResponse } from "next/server";
 import { Product } from '@/models/product';
-import { mongooseConnect } from '@/lib/mongoose';
 import { utapi } from 'uploadthing/server';
 
 // Create product
 export async function POST(req: NextRequest) {
-    const product: Product = await req.json();
     await mongooseConnect();
-    const newProduct: HydratedDocument<ProductDoc> = new Product(product)
-    await newProduct.save();
+    try {
+        const product: Product = await req.json();
+        const newProduct: HydratedDocument<ProductDoc> = new Product(product)
+        await newProduct.save();
+        return NextResponse.json(newProduct);        
+    } catch (error) {
+        return NextResponse.json({ message: error.message }, { status: 500 });
+    }
 
-    return NextResponse.json(newProduct);
 }
 
 // Get all products
 export async function GET() {
     await mongooseConnect();
-    const products: ProductDoc[] = await Product.find({});
-    return NextResponse.json(products);
+    try {
+        const products: ProductDoc[] = await Product.find({});
+        return NextResponse.json(products);
+    } catch (error) {
+        return NextResponse.json({ message: 'Error fetching products' }, { status: 500 });
+    }
 }
 
 // Edit product
 export async function PATCH(req: NextRequest) {
     await mongooseConnect();
-    const data: ProductDoc = await req.json();
-    const updatedProduct: ProductDoc | null = await Product.findOneAndUpdate({ _id: data._id }, data, { returnDocument: 'after' });
-    
-    if(!updatedProduct)
-        return NextResponse.json({ error: 'Database Error'}, { status: 500});
-
-    return NextResponse.json(updatedProduct);
+    try {
+        const data: ProductDoc = await req.json();
+        const updatedProduct: ProductDoc | null = await Product.findOneAndUpdate({ _id: data._id }, data, { returnDocument: 'after' });
+        
+        if(!updatedProduct) throw Error("Couldn't find product in database");
+        
+        return NextResponse.json(updatedProduct);
+    } catch (error) {
+        return NextResponse.json({ message: error.message }, { status: 500 });
+    }
 }
 
-// Instead of DELETE; It has a bug: json() doesn't work in DELETE
+// Instead of DELETE; DELETE() has a bug: req.json() doesn't work in DELETE
 export async function PUT(req: NextRequest) {
     const files = await req.json();
-    console.log(files);
-    const res = await utapi.deleteFiles(files);
-    if(res.success)
-        return NextResponse.json('Deleted successfully');
-    return NextResponse.json('delete was unsuccessful');
+    try {
+        await utapi.deleteFiles(files);
+        return NextResponse.json('Product images have been deleted successfully');
+    } catch (error) {
+        return NextResponse.json({message: 'Utapi Error when deleting product images'}, {status: 500});
+    }   
 }

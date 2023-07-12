@@ -10,23 +10,22 @@ type Params = {
 
 export async function GET(req: NextRequest, { params: { id }}: Params ) {
     await mongooseConnect();
-    const product: ProductDoc | null = await Product.findOne({ _id: id});
-    
-    if(!product)
-        return NextResponse.json({ error: 'Could not find product item.'}, { status: 500 });
-    
-    return NextResponse.json(product);
+    try {
+        const product: ProductDoc | null = await Product.findOne({ _id: id});
+        if(!product) throw Error("Couldn't find product with this id");
+        return NextResponse.json(product);
+    } catch (error) {
+        return NextResponse.json({ message: error.message }, { status: 500 });
+    }
 }
-
 
 export async function DELETE(req: NextRequest, { params: { id }}: Params) {
     await mongooseConnect();
-    console.log('wants to delete');
     try {
-        await Product.findOneAndDelete({ _id: id });
+        const doc = await Product.findOneAndDelete({ _id: id});
+        if(!doc) throw Error("Couldn't find product with this id");
+        return NextResponse.json('deleted successfully');
     } catch (error) {
-        return NextResponse.json({ error }, { status: 500 });
+        return NextResponse.json({ message: error.message  }, { status: 500 });
     }
-
-    return new NextResponse();
 }

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 type Params = {
     params: { id: string }
@@ -12,30 +12,30 @@ export default function DeleteProductPage({ params: { id } }: Params) {
     const router = useRouter();
     const [productInfo, setProductInfo] = useState<ProductDoc>();
 
-    // TODO handle errors
-
     useEffect(() => {
         axios.get(`/api/products/${id}`).then(res => {
             setProductInfo(res.data);
         })
+        .catch(e => console.error('Error: No product with this id!', e));
     }, [id]);
 
     async function deleteItem() {
         if(productInfo?.images?.length) {   
-            const ut = axios.put('/api/products', productInfo?.images?.map(item => item.fileKey));
-            const mongo = axios.delete(`/api/products/${id}`);
+            const ut: Promise<AxiosResponse> = axios.put('/api/products', productInfo?.images?.map(item => item.fileKey));
+            const mongo: Promise<AxiosResponse> = axios.delete(`/api/products/${id}`);
 
             Promise.all([mongo, ut]).then(responses => {
-                responses.forEach(res => {
-                    if (res.statusText !== "OK") 
-                        alert(res.data);
-                });
-                return router.replace('/products');
-            });
+                responses.forEach(res => console.log(res.data) );
+            }).catch(e => console.error(e.response.data.message));
+            return router.replace('/products');
         } else {
-            const res = await axios.delete(`/api/products/${id}`);
-            if(res.statusText === "OK")
-                return router.replace('/products');
+            try {
+                await axios.delete(`/api/products/${id}`);
+            } catch (error) {
+                alert('Error when deleting this product');
+                console.log(error);
+            }     
+            return router.replace('/products');
         }
     }
 

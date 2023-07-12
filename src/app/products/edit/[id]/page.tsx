@@ -1,5 +1,3 @@
-// products/edit/[id]
-
 'use client'
 
 import { useRouter } from 'next/navigation';
@@ -22,11 +20,22 @@ export default async function EditProduct({ params: { id } }: Params) {
         axios.get(`/api/products/${id}`).then(res => {
             setProductInfo(res.data);
         })
+        .catch(e => {
+            console.error(e.response.data.message, e);
+            alert('Error fetching product details');
+            router.replace('/products');
+        });
     }, [id]);
 
     const editProduct = async (productData: ProductDoc | Product) => {
-        // const updatedProduct: ProductDoc = { _id: id, ...productData };
-        const res = await axios.patch('/api/products/', productData);
+        try {
+            await axios.patch('/api/products', productData);
+        } catch (error) {
+            if(error.response.status >= 500)   
+                console.error(error.response.data.message, error);
+            else console.error('Network Error when editing', error);
+            alert('Error when editing product');
+        }
         router.push('/products');
     }
 
