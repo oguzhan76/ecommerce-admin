@@ -4,7 +4,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import Nav from './Nav';
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
-import Loading from '../loading';
+import Loading from '../app/loading';
 
 export default function SessionLayout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession({

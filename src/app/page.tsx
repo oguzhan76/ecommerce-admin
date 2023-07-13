@@ -3,7 +3,7 @@
 'use client'
 
 import { Suspense } from 'react';
-import SessionLayout from './components/SessionLayout';
+import SessionLayout from '../components/SessionLayout';
 import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 

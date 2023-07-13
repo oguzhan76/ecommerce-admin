@@ -1,4 +1,4 @@
-import SessionLayout from "./components/SessionLayout";
+import SessionLayout from "../components/SessionLayout";
 
 export default function Loading() {
     // You can add any UI inside Loading, including a Skeleton.

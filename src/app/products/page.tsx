@@ -12,7 +12,8 @@ export default function Products() {
     useEffect(() => {
         axios.get('/api/products')
             .then(response => {
-                const data = response.data.map(({ __v, ...rest }: { __v: string }) => rest); // get rid of __v field
+                // get rid of __v field
+                const data = response.data.map(({ __v, ...rest }: { __v: string }) => rest); 
                 setProducts(data);
             })
             .catch(e => {

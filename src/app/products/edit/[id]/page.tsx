@@ -2,14 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import ProductForm from '@/app/components/ProductForm';
+import ProductForm from '@/components/ProductForm';
 import { useEffect, useState } from 'react';
 
 type Params = {
     params: { id: string }
 }
-
-// TODO: generate static params
 
 export default async function EditProduct({ params: { id } }: Params) {
     const router = useRouter();

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import ProductForm from '@/app/components/ProductForm';
+import ProductForm from '@/components/ProductForm';
 
 export default function NewProduct() {
     const router = useRouter();
