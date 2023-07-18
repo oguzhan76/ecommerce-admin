@@ -2,6 +2,7 @@
 
 'use client'
 
+import { Metadata } from 'next';
 import { Suspense } from 'react';
 import SessionLayout from '../components/SessionLayout';
 import { useSession } from 'next-auth/react';

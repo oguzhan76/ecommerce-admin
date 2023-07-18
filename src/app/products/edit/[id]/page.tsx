@@ -9,6 +9,8 @@ type Params = {
     params: { id: string }
 }
 
+export const revalidate = 60;
+
 export default async function EditProduct({ params: { id } }: Params) {
     const router = useRouter();
     const [productInfo, setProductInfo] = useState<ProductDoc>();

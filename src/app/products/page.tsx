@@ -1,9 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+
+export async function generateMetadata(params:ProductDoc[]) {
+    const res = await fetch('/api/products').then(res => res.json());
+
+    return {
+        title: 'Products',
+        description: 'List of products in database'
+    }
+}
 
 export default function Products() {
     const [products, setProducts] = useState<ProductDoc[]>([]);
@@ -13,7 +22,7 @@ export default function Products() {
         axios.get('/api/products')
             .then(response => {
                 // get rid of __v field
-                const data = response.data.map(({ __v, ...rest }: { __v: string }) => rest); 
+                const data = response.data.map(({ __v, ...rest }: { __v: string }) => rest);
                 setProducts(data);
             })
             .catch(e => {
