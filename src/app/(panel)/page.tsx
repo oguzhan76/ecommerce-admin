@@ -2,7 +2,7 @@
 
 import { getServerSession } from 'next-auth';
 import Image from 'next/image';
-import { AuthOptions } from './api/auth/[...nextauth]/route';
+import { AuthOptions } from '../api/auth/[...nextauth]/route';
 
 export default async function Home() {
   const session = await getServerSession(AuthOptions);
