@@ -8,7 +8,8 @@ export const metadata: Metadata = {
   description: 'List of products in database'
 }
 
-export default function layout({ children }: { children: React.ReactNode }) {
+export default async function layout({ children }: { children: React.ReactNode }) {
+  
   return (
       <Suspense fallback={<Loading />}>
         {children}

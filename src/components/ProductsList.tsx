@@ -1,11 +1,9 @@
+import { GetAllProducts } from '@/app/api/lib';
 import Link from 'next/link';
 
 export default async function ProductsList() {
 
-  const fetchProducts = async (): Promise<ProductDoc[]> => {
-    return await fetch('/api/products').then(res => res.json()).then(data => data)
-  }
-  const products: ProductDoc[] = await fetchProducts();
+  const products: ProductDoc[] = await GetAllProducts();
 
   if (!products) {
     console.log('couldnt get products');
