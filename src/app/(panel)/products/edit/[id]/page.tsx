@@ -1,5 +1,5 @@
 import { GetAllProducts, GetProductById } from '@/app/api/lib';
-import EditProduct from './_components/EditProduct';
+import EditProduct from '@/components/EditProduct';
 
 
 async function staticParams() {
@@ -16,8 +16,8 @@ type Params = {
 }
 
 export default async function EditProductPage({ params: { id } }: Params) {
-
     const productInfo: ProductDoc | null = await GetProductById(id);
+
     if(!productInfo) return <div>Couldnt get any data</div>
 
     return (

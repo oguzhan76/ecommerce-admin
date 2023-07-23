@@ -4,6 +4,7 @@ import Link from 'next/link';
 export default async function ProductsList() {
 
   const products: ProductDoc[] = await GetAllProducts();
+  // console.log(products);
 
   if (!products) {
     console.log('couldnt get products');

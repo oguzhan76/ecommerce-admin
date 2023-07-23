@@ -5,7 +5,7 @@ import axios from 'axios';
 import ProductForm from '@/components/ProductForm';
 
 
-export default async function EditProduct({ productInfo }: { productInfo: ProductDoc }) {
+export default function EditProduct({ productInfo }: { productInfo: ProductDoc }) {
     const router = useRouter();
 
     const editProduct = async (productData: ProductDoc | Product) => {
@@ -20,7 +20,7 @@ export default async function EditProduct({ productInfo }: { productInfo: Produc
         router.push(`/products`);
         router.refresh();
     }
-    
+
     return (
         <>
             <h1>Edit Product</h1>
@@ -31,3 +31,4 @@ export default async function EditProduct({ productInfo }: { productInfo: Produc
         </>
     )
 }
+
