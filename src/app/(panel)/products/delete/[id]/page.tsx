@@ -16,7 +16,10 @@ export default function DeleteProductPage({ params: { id } }: Params) {
         axios.get(`/api/products/${id}`).then(res => {
             setProductInfo(res.data);
         })
-        .catch(e => console.error('Error: No product with this id!', e));
+        .catch(e => {
+            alert("There's no such product!");
+            console.error('Error: No product with this id!', e)
+        });
     }, [id]);
 
     async function deleteItem() {
@@ -35,7 +38,8 @@ export default function DeleteProductPage({ params: { id } }: Params) {
                 alert('Error when deleting this product');
                 console.log(error);
             }     
-            return router.replace('/products');
+            router.replace('/products');
+            router.refresh();
         }
     }
 

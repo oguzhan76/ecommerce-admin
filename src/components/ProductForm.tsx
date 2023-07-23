@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, FormEvent } from 'react'
 import { UploadDropzone } from '@/lib/uploadthing';
 import ImagesList from './ImagesList';
@@ -6,11 +8,11 @@ import axios, { AxiosResponse } from 'axios';
 import useOnComponentUnmounts from '../hooks/useOnComponentUnmounts';
 
 type Props = {
-    editProduct: (p: ProductDoc | Product) => void,
+    onSubmit: (p: ProductDoc | Product) => void,
     productInfo?: ProductDoc | Product
 }
 
-export default function ProductForm({ editProduct, productInfo }: Props) {
+export default function ProductForm({ onSubmit, productInfo }: Props) {
     const [title, setTitle] = useState<string>(productInfo?.title || '');
     const [description, setDescription] = useState<string>(productInfo?.description || '');
     const [price, setPrice] = useState<string>(productInfo?.price || '');
@@ -42,7 +44,7 @@ export default function ProductForm({ editProduct, productInfo }: Props) {
             price,
             images: imgs
         }
-        editProduct(productData);
+        onSubmit(productData);
     }
 
     async function deleteSelectedImages() {
