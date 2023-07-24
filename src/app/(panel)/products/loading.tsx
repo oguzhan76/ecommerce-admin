@@ -1,7 +1,10 @@
+import NewProductButton from '@/components/NewProductButton'
 import React from 'react'
 
-export default function loading() {
+export default function Loading() {
   return (
-      <div>Products loading...</div>
+    <>
+      <p>Loading...</p>
+    </>
   )
 }

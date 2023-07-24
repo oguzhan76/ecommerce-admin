@@ -1,4 +1,4 @@
-import { GetAllProducts, GetProductById } from '@/app/api/lib';
+import { GetAllProducts, GetProductById } from '@/lib/api';
 import EditProduct from '@/components/EditProduct';
 
 

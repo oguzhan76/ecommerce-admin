@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 import { NextRequest, NextResponse } from "next/server";
 import { Product } from '@/models/product';
 import { utapi } from 'uploadthing/server';
-import { GetAllProducts } from '../lib';
+import { GetAllProducts } from '@/lib/api';
 
 // Create product
 export async function POST(req: NextRequest) {

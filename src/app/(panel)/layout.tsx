@@ -1,3 +1,4 @@
+import "@uploadthing/react/styles.css";
 import { NextAuthProvider } from '@/components/NextAuthProvider';
 import { getServerSession } from "next-auth";
 import { AuthOptions } from "../api/auth/[...nextauth]/route";

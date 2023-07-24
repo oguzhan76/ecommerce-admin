@@ -18,7 +18,6 @@ export default function EditProduct({ productInfo }: { productInfo: ProductDoc }
             alert('Error when editing product');
         }
         router.push(`/products`);
-        router.refresh();
     }
 
     return (

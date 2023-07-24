@@ -18,7 +18,6 @@ export default function NewProduct() {
             alert('Error when creating product');
         }
         router.push('/products');
-        router.refresh();
     }
 
     return (

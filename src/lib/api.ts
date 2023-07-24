@@ -7,7 +7,9 @@ export async function GetAllProducts(): Promise<ProductDoc[]> {
             await mongooseConnect();
             const query = await Product.find();
             const products: ProductDoc[] = query.map(product => ({ ...product.toObject(), _id: product._id.toString() }));
-            resolve(products);
+            setTimeout(() => {
+                resolve(products);
+            }, 3000);
         } catch (error) {
             reject(error);
         }

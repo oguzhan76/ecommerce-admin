@@ -1,10 +1,17 @@
-import { GetAllProducts } from '@/app/api/lib';
+'use client'
+
+import { GetAllProducts } from '@/lib/api';
 import Link from 'next/link';
 
 export default async function ProductsList() {
+  
+  // const products: ProductDoc[] = await GetAllProducts();
 
-  const products: ProductDoc[] = await GetAllProducts();
-  // console.log(products);
+
+  const res = await fetch('/api/products');
+  const products: ProductDoc[] = await res.json();
+
+
 
   if (!products) {
     console.log('couldnt get products');

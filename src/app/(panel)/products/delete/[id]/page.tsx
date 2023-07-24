@@ -39,7 +39,6 @@ export default function DeleteProductPage({ params: { id } }: Params) {
                 console.log(error);
             }     
             router.replace('/products');
-            router.refresh();
         }
     }
 
