@@ -3,8 +3,9 @@ import EditProduct from '@/components/EditProduct';
 
 
 async function staticParams() {
-    const products: ProductDoc[] = await GetAllProducts();
-    return products.map(item => ({ id: item._id.toString() }));
+    const res = await GetAllProducts();
+    const products: ProductDoc[] = await res.json();
+    return products.map(item => ({ id: item._id }));
 }
 
 // fix "dynamic server usage" errors in dev mode by turning off static generation and forcing dynamic rendering
@@ -16,7 +17,8 @@ type Params = {
 }
 
 export default async function EditProductPage({ params: { id } }: Params) {
-    const productInfo: ProductDoc | null = await GetProductById(id);
+    const res = await GetProductById(id);
+    const productInfo: ProductDoc = await res.json();
 
     if(!productInfo) return <div>Couldnt get any data</div>
 

@@ -4,17 +4,13 @@ import { GetAllProducts } from '@/lib/api';
 import Link from 'next/link';
 
 export default async function ProductsList() {
-  
-  // const products: ProductDoc[] = await GetAllProducts();
-
 
   const res = await fetch('/api/products');
   const products: ProductDoc[] = await res.json();
 
-
-
   if (!products) {
     console.log('couldnt get products');
+    // TODO show something to user
     return;
   }
 

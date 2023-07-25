@@ -2,6 +2,10 @@ import { mongooseConnect } from '@/lib/mongoose';
 import { NextRequest, NextResponse } from "next/server";
 import { Product } from '@/models/product';
 
+// mongoose.Types.ObjectId.prototype.valueOf = function() {
+//     return this.toString();
+// }
+
 type Params = {
     params: {
         id: string
@@ -11,7 +15,7 @@ type Params = {
 export async function GET(req: NextRequest, { params: { id }}: Params ) {
     await mongooseConnect();
     try {
-        const product: ProductDoc | null = await Product.findOne({ _id: id});
+        const product: ProductDoc = await Product.findOne({ _id: id}) as ProductDoc;
         if(!product) throw Error("Couldn't find product with this id");
         return NextResponse.json(product);
     } catch (error) {

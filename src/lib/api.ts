@@ -1,28 +1,27 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/product";
+import { NextResponse } from "next/server";
 
-export async function GetAllProducts(): Promise<ProductDoc[]> {
+// Reason for returning a NextResponse is that it converts mongoose to js object in the process.
+
+export async function GetAllProducts(): Promise<NextResponse> {
     return new Promise(async (resolve, reject) => {
         try {
             await mongooseConnect();
-            const query = await Product.find();
-            const products: ProductDoc[] = query.map(product => ({ ...product.toObject(), _id: product._id.toString() }));
-            setTimeout(() => {
-                resolve(products);
-            }, 3000);
+            const products: ProductDoc[] = await Product.find();
+            resolve(NextResponse.json(products));
         } catch (error) {
             reject(error);
         }
     });
 }
 
-export async function GetProductById(_id: string): Promise<ProductDoc> {
+export async function GetProductById(_id: string): Promise<NextResponse> {
     return new Promise(async(resolve, reject) => {
         try {
             await mongooseConnect();
-            const query = await Product.findOne({ _id });   
-            const product: ProductDoc = {...query.toObject(), _id: query._id.toString()};
-            resolve(product);
+            const query = await Product.findOne({ _id });  
+            resolve(NextResponse.json(query));
         } catch (error) {
             reject(error);
         }

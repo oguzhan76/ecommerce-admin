@@ -17,3 +17,13 @@ interface ImageType {
 interface SelectableImage extends ImageType {
     selected?: boolean
 }
+
+// ----------------
+
+interface Category {
+    name: string,
+}
+
+interface CategoryDoc extends Category{
+    _id: string
+}
