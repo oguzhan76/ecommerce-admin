@@ -1,10 +1,8 @@
 import { mongooseConnect } from '@/lib/mongoose';
 import { NextRequest, NextResponse } from "next/server";
 import { Product } from '@/models/product';
-
-// mongoose.Types.ObjectId.prototype.valueOf = function() {
-//     return this.toString();
-// }
+import { getServerSession } from 'next-auth';
+import { AuthOptions } from '../../auth/[...nextauth]/route';
 
 type Params = {
     params: {
@@ -24,6 +22,11 @@ export async function GET(req: NextRequest, { params: { id }}: Params ) {
 }
 
 export async function DELETE(req: NextRequest, { params: { id }}: Params) {
+    // Authorize.
+    const session = await getServerSession(AuthOptions);
+    if (!session) 
+        return NextResponse.json({ message: 'Not Authorized'}, { status: 401 });
+
     await mongooseConnect();
     try {
         const doc = await Product.findOneAndDelete({ _id: id});

@@ -2,13 +2,12 @@ import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/product";
 import { NextResponse } from "next/server";
 
-// Reason for returning a NextResponse is that it converts mongoose to js object in the process.
-
 export async function GetAllProducts(): Promise<NextResponse> {
     return new Promise(async (resolve, reject) => {
         try {
             await mongooseConnect();
             const products: ProductDoc[] = await Product.find();
+            // Reason for returning a NextResponse is that it converts mongoose to js object in the process.
             resolve(NextResponse.json(products));
         } catch (error) {
             reject(error);

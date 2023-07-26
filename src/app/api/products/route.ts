@@ -3,9 +3,16 @@ import { HydratedDocument } from 'mongoose';
 import { NextRequest, NextResponse } from "next/server";
 import { Product } from '@/models/product';
 import { utapi } from 'uploadthing/server';
+import { getServerSession } from 'next-auth';
+import { AuthOptions } from '../auth/[...nextauth]/route';
 
 // Create product
 export async function POST(req: NextRequest) {
+    // Authorize.
+    const session = await getServerSession(AuthOptions);
+    if (!session) 
+        return NextResponse.json({ message: 'Not Authorized'}, { status: 401 });
+        
     await mongooseConnect();
     try {
         const product: Product = await req.json();
@@ -30,6 +37,11 @@ export async function GET() {
 
 // Edit product
 export async function PATCH(req: NextRequest) {
+    // Authorize.
+    const session = await getServerSession(AuthOptions);
+    if (!session) 
+        return NextResponse.json({ message: 'Not Authorized'}, { status: 401 });
+    
     await mongooseConnect();
     try {
         const data: ProductDoc = await req.json();
