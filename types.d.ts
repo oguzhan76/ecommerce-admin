@@ -1,7 +1,7 @@
 interface Product {
     title: string;
     description?: string;
-    price: string;
+    price: number;
     images?: ImageType[]
 }
 

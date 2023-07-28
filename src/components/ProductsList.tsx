@@ -9,6 +9,8 @@ export default function ProductsList() {
   const [products, setProducts] = useState<ProductDoc[]>([]);
   const [displayedProducts, setDisplayedProducts] = useState<ProductDoc[]>([]);
 
+  console.log(products);
+
   useEffect(() => {
     fetch('/api/products')
       .then(res => res.json())
@@ -33,9 +35,13 @@ export default function ProductsList() {
 // change select outline color, add defaultValue={sortOptions[0]} (which should be last added)
   return (
     <>
-      <div className='mt-2 flex gap-3'>
+      <div className='mt-4 flex gap-3'>
         <input type='text' onChange={(e) => handleSearch(e.target.value)}/>
         <SortDropdown products={products} returnSorted={handleSort}/>
+      </div>
+      <div className='flex border-b-2 border-cyan-900 border-opacity-25 gap-2 mt-4'>
+        <p className='w-[675px]'>Product Name</p>
+        <p className='w-32'>Price</p>
       </div>
       <div className='flex flex-col gap-1 mt-2'>
         {displayedProducts.map(product => (

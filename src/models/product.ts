@@ -8,7 +8,7 @@ const ModelSchema = new Schema<Product>({
     },
     description: String,
     price: {
-        type: String,
+        type: Number,
         required: true
     },
     images: [

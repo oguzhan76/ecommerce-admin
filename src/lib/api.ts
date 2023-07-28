@@ -16,6 +16,7 @@ export async function GetAllProducts(): Promise<NextResponse> {
 }
 
 export async function GetProductById(_id: string): Promise<NextResponse> {
+    console.log('request to get productById');
     return new Promise(async(resolve, reject) => {
         try {
             await mongooseConnect();

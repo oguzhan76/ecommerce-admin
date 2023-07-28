@@ -15,7 +15,7 @@ type Props = {
 export default function ProductForm({ onSubmit, productInfo }: Props) {
     const [title, setTitle] = useState<string>(productInfo?.title || '');
     const [description, setDescription] = useState<string>(productInfo?.description || '');
-    const [price, setPrice] = useState<string>(productInfo?.price || '');
+    const [price, setPrice] = useState<string>(productInfo?.price?.toString() || '');
     const [images, setImages] = useState<SelectableImage[]>(productInfo?.images || []);
     const [stagedImages, setStagedImages] = useState<SelectableImage[]>([]);
     const [saving, setSaving] = useState<boolean>(false);
@@ -37,11 +37,12 @@ export default function ProductForm({ onSubmit, productInfo }: Props) {
         // to prevent deleteStagedImages to delete images when saving
         setSaving(true);
         const imgs: ImageType[] = images.concat(stagedImages)
+        console.log('number price:', parseFloat(price));
         const productData = {
             ...productInfo,
             title,
             description,
-            price,
+            price: parseFloat(price),
             images: imgs
         }
         onSubmit(productData);

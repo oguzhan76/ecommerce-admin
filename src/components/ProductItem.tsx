@@ -8,7 +8,7 @@ type Props = {
 function ProductItem({ product }: Props) {
     return (
         <div className='rounded-lg bg-slate-200 px-2 inline-flex justify-between h-10 items-center'>
-            <p className='flex-grow'>
+            <p className='w-[675px]'>
                 {product.title}
             </p>
             <p className='w-32'>
