@@ -39,7 +39,7 @@ export default function ProductsList() {
         <input type='text' onChange={(e) => handleSearch(e.target.value)}/>
         <SortDropdown products={products} returnSorted={handleSort}/>
       </div>
-      <div className='flex border-b-2 border-cyan-900 border-opacity-25 gap-2 mt-4'>
+      <div className='flex bottomline gap-2 mt-4'>
         <p className='w-[675px]'>Product Name</p>
         <p className='w-32'>Price</p>
       </div>

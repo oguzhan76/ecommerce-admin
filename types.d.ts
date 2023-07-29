@@ -22,8 +22,14 @@ interface SelectableImage extends ImageType {
 
 interface Category {
     name: string,
+    parent?: object
 }
 
 interface CategoryDoc extends Category{
     _id: string
+}
+
+type OptionType = {
+    value: string,
+    label: string
 }

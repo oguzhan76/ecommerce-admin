@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     await mongooseConnect();
     try {
         const product: Product = await req.json();
-        const newProduct: HydratedDocument<ProductDoc> = new Product(product)
+        const newProduct: HydratedDocument<ProductDoc> = new Product(product);
         await newProduct.save();
         return NextResponse.json(newProduct);        
     } catch (error) {

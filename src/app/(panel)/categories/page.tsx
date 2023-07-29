@@ -1,36 +1,43 @@
 'use client'
 
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, { FormEvent, useEffect, useRef, useState } from 'react';
+import NewCategoryForm from '@/components/NewCategoryForm';
+import axios from 'axios';
 
 export default function CategoriesPage() {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<CategoryDoc[]>([]);
+
+
 
   useEffect(() => {
-    fetch('/api/categories').then(res => res.json()).then(data => setCategories(data));
+    fetchCategories();
   }, [])
 
-  function saveNewCategory(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  console.log(categories);
+
+  async function fetchCategories() {
+    // fetch('/api/categories').then(res => res.json()).then(data => setCategories(data));
+    const res = await axios.get('/api/categories');
+    setCategories(res.data);
   }
+
+
 
   return (
     <>
       <h1>Categories</h1>
-      <div>
-        <label>New category name</label>
-        <form onSubmit={saveNewCategory} className='flex gap-1 mb-4'>
-          <input type='text' className='pl-1 w-72' autoFocus/>
-          <button type='submit' className='btn-primary'>Save</button>
-        </form>
-      </div>
+      <NewCategoryForm categories={categories}/>
       <section>
-        <div className='p-0 border-solid border-b-2 border-slate-400'>
+        <div className='p-0 bottomline'>
           <h3>Category Name</h3>
         </div>
-        <div>
-          {categories.map(item => {
-            return <p key={item}>{item}</p>
-          })}
+        <div className='flex flex-col gap-1 mt-2'>
+          {categories.map(item => (
+            <div key={item._id} className='rounded-lg bg-slate-200 px-2 inline-flex justify-between h-10 items-center'>
+              <p>{item.name}</p>
+            </div>
+          ))
+          }
         </div>
       </section>
     </>
