@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect, FormEvent} from 'react';
 import axios from 'axios';
 import CategoryParentDropdown from './CategoryParentDropdown';
-import mongoose from 'mongoose';
+import * as mongoose from 'mongoose';
 
-export default function NewCategoryForm({ categories }: {categories: CategoryDoc[] }) {
+export default function NewCategoryForm({ categories }: {categories: Category[] }) {
     const inputRef = useRef<HTMLInputElement>(null);
     const [parent, setParentId] = useState<string | null>(null);
 

@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET() {
     try {
         await mongooseConnect();
-        const categories = await Category.find();
+        const categories = await Category.find().populate({ path: 'parent', model: Category }).exec();
         return NextResponse.json(categories);
     } catch (error) {
         return NextResponse.json({ message: 'Error fetching products' }, { status: 500 });
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
         await mongooseConnect();
         const category: Category = await req.json();
         console.log(category);
-        const newCategory: HydratedDocument<CategoryDoc> = new Category(category);
+        const newCategory: HydratedDocument<Category> = new Category(category);
         await newCategory.save();
         return NextResponse.json(newCategory);
     } catch (error) {

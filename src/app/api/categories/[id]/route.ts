@@ -11,7 +11,7 @@ type Params = {
 export async function GET(req: NextRequest, { params: { id }}: Params ) {
     await mongooseConnect();
     try {
-        const query = await Category.findOne({ _id: id});
+        const query: Category | null = await Category.findOne({ _id: id});
         console.log();
 
         // if(!product) throw Error("Couldn't find product with this id");
