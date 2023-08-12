@@ -7,7 +7,7 @@ input, textarea {
 }
 
 input:focus, textarea:focus {
-  @apply border-cyan-500 outline-none;
+  @apply border-blue-500 outline-none;
 }
 
 h1 {
@@ -34,29 +34,6 @@ label {
   @apply bg-red-800 ;
 }
 
-table.basic{
-  @apply w-full
-}
-
-table.basic tr {
-  @apply min-h-fit;
-}
- /* slate-300
-    teal-100
-    zinc-300
- */
-table.basic thead tr td {
-  /* @apply bg-teal-100; */
-  @apply bg-sky-200;
-}
-
-table.basic tr td{
-  @apply border border-sky-200;
-}
-
-table.basic a{
-  @apply bg-cyan-700 text-white text-sm p-1 rounded-md m-1 inline-flex;
-}
 
 .bottomline {
   @apply border-b-2 border-cyan-900 border-opacity-25;

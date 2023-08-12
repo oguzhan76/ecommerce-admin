@@ -22,13 +22,7 @@ type Props = {
 
 function SortDropdown({ products, returnSorted }: Props) {
     const [sort, setSort] = useState<OptionType | null>(null);
-    // if price is string
-    // const productsCopy: ProductDoc[] = products.map(item => ({ ...item, price: item.price.replace(/\D\./g, "")}));
-    // if it's number
     const productsCopy: ProductDoc[] = [...products];
-
-    // console.log(productsCopy.forEach(item => console.log(parseInt(item.price))));
-
 
     const handleOnChange = (selected: OptionType | null) => {
         setSort(selected);
@@ -37,16 +31,10 @@ function SortDropdown({ products, returnSorted }: Props) {
                 returnSorted(productsCopy.sort((a, b) => a.title.localeCompare(b.title)))
                 break;
             case 'priceInc':
-                returnSorted(productsCopy.sort((a, b) => {
-                    // return parseInt(a.price) - parseInt(b.price);
-                    return a.price - b.price;
-                }));
+                returnSorted(productsCopy.sort((a, b) => a.price - b.price ));
                 break;
             case 'priceDec':
-                returnSorted(productsCopy.sort((a, b) => {
-                    // return parseInt(b.price) - parseInt(a.price);
-                    return b.price - a.price;
-                }));
+                returnSorted(productsCopy.sort((a, b) => b.price - a.price ));
                 break;
             default:
                 break;
