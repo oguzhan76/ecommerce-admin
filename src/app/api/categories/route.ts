@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
     }
 }
 
+// Edit
 export async function PATCH(req: NextRequest) {
     // Authorize.
     const session = await getServerSession(AuthOptions);
@@ -40,7 +41,6 @@ export async function PATCH(req: NextRequest) {
     await mongooseConnect();
     try {
         const category: Category = await req.json();
-        console.log(category);
         const updatedCategory: Category | null = await Category.findOneAndUpdate({ _id: category._id }, category, { returnDocument: 'after'});
 
         if(!updatedCategory) throw Error("Couldn't find product in database");
@@ -48,5 +48,22 @@ export async function PATCH(req: NextRequest) {
     } catch (error) {
         return NextResponse.json({ message: error.message }, { status: 500 });
     }
+}
 
+// Delete
+export async function PUT(req: NextRequest) {
+    const session = await getServerSession(AuthOptions);
+    if(!session)
+        return NextResponse.json({ message: 'NotAuthorized' }, { status: 401 });
+
+    await mongooseConnect();
+    try {
+        const _id = await req.json();
+        const deletedCat = await Category.findOneAndDelete({ _id });
+        console.log('deleted', deletedCat);
+        if(!deletedCat) throw Error("Couldn't find category with this id");
+        return NextResponse.json("Deleted Successfully");
+    } catch (error) {
+        return NextResponse.json({ message: error.message }, { status: 500 });
+    }
 }

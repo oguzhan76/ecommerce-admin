@@ -7,26 +7,26 @@ type Props = {
     cancelButtonText?: string,
     noCancelButton?: boolean,
     onClose?: () => void,
-    onCancel: () => void,
+    onCancel?: () => void,
     onAccept: () => void,
     children: React.ReactNode
 }
 
 export default function Dialog({ 
-    dialogRef, 
-    title, 
-    acceptButtonText = 'Yes', 
+    dialogRef,
+    title,
+    acceptButtonText = 'Yes',
     cancelButtonText = 'Cancel',
     noCancelButton,
     onClose,
-    onCancel, 
-    onAccept, 
+    onCancel,
+    onAccept,
     children 
 }: Props) {
 
     function cancel() {
         dialogRef.current?.close();
-        onCancel();
+        if(onCancel) onCancel();
         if (onClose) onClose();
     }
 
@@ -37,9 +37,9 @@ export default function Dialog({
     }
     return (
         <>
-            <dialog ref={dialogRef} onCancel={cancel} className='rounded-lg backdrop:bg-cyan-900/30 p-0'>
+            <dialog ref={dialogRef} onCancel={cancel} className='rounded-lg shadow-2xl backdrop:bg-cyan-900/30 p-0'>
                 <div>
-                    {title && <div className='text-center bg-red-700/70 p-1'>
+                    {title && <div className='text-center text-white bg-red-600 p-1'>
                         {title}
                     </div>}
                     <div className='text-center p-2 pb-0'>

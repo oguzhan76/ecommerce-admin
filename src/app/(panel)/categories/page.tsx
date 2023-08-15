@@ -35,7 +35,7 @@ export default function CategoriesPage() {
         </div>
         <div className='flex flex-col gap-1 mt-2'>
           {categories.map(item => (
-            <CategoriesListItem key={item._id} item={item} categories={categories} onEdit={onEditAnItem}/>
+            <CategoriesListItem key={item._id} item={item} categories={categories} onEdit={onEditAnItem} onDelete={fetchCategories}/>
           ))
           }
         </div>

@@ -3,17 +3,19 @@
 import { useState, useRef, FormEvent } from 'react';
 import axios from 'axios';
 import CategoryParentDropdown from './CategoryParentDropdown';
+import Dialog from './Dialog';
 
 type Props = {
     item: PopdCategoryDoc,
     categories: PopdCategoryDoc[],
-    onEdit: (cat: PopdCategoryDoc) => void
+    onEdit: (cat: PopdCategoryDoc) => void,
+    onDelete: () => void
 }
 
-export default function CategoriesListItem({ item, categories, onEdit }: Props) {
-    const [editing, setEditing] = useState<boolean>(false);
+export default function CategoriesListItem({ item, categories, onEdit, onDelete }: Props) {
     const inputRef = useRef<HTMLInputElement>(null);
     const deleteDialogRef = useRef<HTMLDialogElement | null>(null);
+    const [editing, setEditing] = useState<boolean>(false);
     const [parent, setParentId] = useState<string | null>(null);
 
 
@@ -35,12 +37,27 @@ export default function CategoriesListItem({ item, categories, onEdit }: Props) 
         deleteDialogRef.current?.showModal();
     }
 
+    async function deleteItem() {
+        try {
+            const res = await axios.put('/api/categories', { _id: item._id});
+            if(res.status === 200) {
+                onDelete();
+            }
+        } catch (error) {
+            alert(`Error! ${error.message}`);
+        }
+    }
+
     return (
         <>
-        <dialog ref={deleteDialogRef}>
-            <p>Are you sure</p>
-            <button>YES</button>
-        </dialog>
+            <Dialog 
+                dialogRef={deleteDialogRef} 
+                title='Are you sure?'
+                onAccept={deleteItem} 
+            >
+                <p>{`Deleting category '${item.name}'.`}</p> 
+                <p>{`Any children category will no longer reference this!`}</p>    
+            </Dialog>
             {editing ?
                 <div key={item._id} className='rounded-lg bg-slate-200 px-2 inline-flex justify-between h-16 items-center'>
                     <form onSubmit={saveEdit} className='flex gap-3'>
