@@ -4,17 +4,19 @@ import React, { useRef, useState, FormEvent} from 'react';
 import axios from 'axios';
 import CategoryParentDropdown from './CategoryParentDropdown';
 
-export default function NewCategoryForm({ categories }: { categories: Category[] }) {
+type Props = {
+    categories: Category[],
+    onSave: (name: string, parentId: string | null) => void,
+}
+
+export default function NewCategoryForm({ categories, onSave }: Props) {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [parent, setParentId] = useState<string | null>(null);
+    const [parentId, setParentId] = useState<string | null>(null);
 
     async function saveNewCategory(e: FormEvent<HTMLFormElement>) {
-        // e.preventDefault();
-        const newCategory: Category = {
-            name: inputRef.current?.value || '',
-            parent
-        }
-        const res = await axios.post('/api/categories', newCategory);
+        e.preventDefault();
+        onSave(inputRef.current?.value || '', parentId);
+        inputRef.current!.value = '';
     }
     
     return (

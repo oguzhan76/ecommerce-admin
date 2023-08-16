@@ -25,15 +25,24 @@ interface SelectableImage extends ImageType {
 interface Category {
     _id?: string,
     name: string,
-    parent?: ObjectId
+    parent?: ObjectId,
+    children: ObjectId[]
+}
+
+interface Cat extends Category {
+    _id: string,
+    parent: Cat,
 }
 
 interface PopdCategoryDoc {
-    _id: string
+    _id: string,
     name: string,
-    parent: Category
+    parent: PopdCategoryDoc
 }
 
+interface CategoryWithChildren extends PopdCategoryDoc {
+    children: string[] | undefined;
+  }
 // ----------------
 
 type OptionType = {

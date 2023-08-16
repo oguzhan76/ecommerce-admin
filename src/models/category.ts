@@ -1,5 +1,5 @@
-import { ObjectId } from "mongodb";
-import { Schema, model, models } from "mongoose";
+// import { ObjectId } from "mongodb";
+import { Schema, model, models, Types } from "mongoose";
 
 const CategorySchema = new Schema<Category>({
     name: {
@@ -7,10 +7,14 @@ const CategorySchema = new Schema<Category>({
         required: true
     },
     parent: {
-        type: ObjectId
-    }
+        type: Schema.Types.ObjectId
+    },
+    children: [
+        { type: Schema.Types.ObjectId }
+    ]
 });
 
+// When a category is deleted, delete it from children's parent reference.
 CategorySchema.post("findOneAndDelete", document => {
     const catId = document._id;
     Category.find({ parent: catId })

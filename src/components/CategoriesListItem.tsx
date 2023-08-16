@@ -6,9 +6,9 @@ import CategoryParentDropdown from './CategoryParentDropdown';
 import Dialog from './Dialog';
 
 type Props = {
-    item: PopdCategoryDoc,
-    categories: PopdCategoryDoc[],
-    onEdit: (cat: PopdCategoryDoc) => void,
+    item: Category,
+    categories: Category[],
+    onEdit: (cat: Category) => void,
     onDelete: () => void
 }
 
@@ -16,21 +16,34 @@ export default function CategoriesListItem({ item, categories, onEdit, onDelete 
     const inputRef = useRef<HTMLInputElement>(null);
     const deleteDialogRef = useRef<HTMLDialogElement | null>(null);
     const [editing, setEditing] = useState<boolean>(false);
-    const [parent, setParentId] = useState<string | null>(null);
+    const [parentId, setParentId] = useState<string | null>(null);
 
 
     async function saveEdit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        console.log('parent', parent);
+
         const editedCategory: Category = {
             _id: item._id,
             name: inputRef.current?.value || '',
-            parent: parent || item.parent
+            parent: parentId ? categories.find(i => i._id === parentId) : item.parent,
+            children: item.children
         }
-        const res = await axios.patch('/api/categories', editedCategory);
-        setEditing(false);
-        onEdit(res.data);
-        console.log(res.data);
+        try {
+            if(!parentId){
+                if(item.name === inputRef.current?.value) return setEditing(false);
+                const editedCategory: Category = {
+                    ...item,
+                    name: inputRef.current?.value || '',
+                }
+            }
+            const res = await axios.patch('/api/categories', editedCategory);
+            setEditing(false);
+            // const cat = { ...res.data, parent: }
+            onEdit(res.data);
+            setParentId(null);
+        } catch (error) {
+            alert(`Error when editing. Try again!`);
+        }
     }
 
     function showDialog() {
@@ -67,7 +80,7 @@ export default function CategoriesListItem({ item, categories, onEdit, onDelete 
                         <button type='button' onClick={() => setEditing(false)} className='btn-primary'>Cancel</button>
                     </form>
                 </div>
-                :
+            :
                 <div key={item._id} className='rounded-lg bg-slate-200 px-2 inline-flex justify-between h-10 items-center'>
                     <div className='flex'>
                         <p className='w-96'>{item.name}</p>
