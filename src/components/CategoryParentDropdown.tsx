@@ -1,18 +1,17 @@
-import { PopulatedCategory } from '@/interfaces/ICategory';
 import React, { useState } from 'react';
 import Select from 'react-select';
 
 type Props = {
-    categories: PopulatedCategory[],
+    categories: Category[],
     setParent: (c: string | undefined) => void,
-    defaultParentName?: string
+    defaultId?: string
 }
 
-function CategoryParentDropdown({ categories, setParent, defaultParentName = 'No Parent' }: Props) {
+function CategoryParentDropdown({ categories, setParent, defaultId = '' }: Props) {
     const [option, setOption] = useState<OptionType | null>();
 
     const Options: OptionType[] = categories.map(item => ({ value: item._id || '', label: item.name }));
-    Options.unshift({ value: 'no parent', label: 'No Parent'});
+    Options.unshift({ value: '', label: 'No Parent'});
 
     const handleOnChange = (selected: OptionType | null) => {
         setOption(selected);
@@ -26,7 +25,7 @@ function CategoryParentDropdown({ categories, setParent, defaultParentName = 'No
             value={option}
             placeholder='Parent'
             onChange={handleOnChange}
-            defaultValue={Options.find(op => op.label === defaultParentName)}
+            defaultValue={Options.find(op => op.value === defaultId)}
             isClearable={true}
             isSearchable={true}
         />

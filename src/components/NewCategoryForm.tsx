@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useRef, useState, FormEvent} from 'react';
-import axios from 'axios';
 import CategoryParentDropdown from './CategoryParentDropdown';
 
 type Props = {
