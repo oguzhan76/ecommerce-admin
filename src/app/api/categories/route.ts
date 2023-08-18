@@ -1,15 +1,18 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Category } from "@/models/category";
-import mongoose, { HydratedDocument } from "mongoose";
+import { ICategoryDocument, ICategoryModel } from "@/interfaces/ICategory";
+import mongoose, { HydratedDocument, ObjectId } from "mongoose";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { AuthOptions } from "../auth/[...nextauth]/route";
+import { UpdateResult } from "mongodb";
 
 // Get all categories
 export async function GET() {
     try {
         await mongooseConnect();
-        const categories = await Category.find().populate({ path: 'parent', model: Category }).exec();
+        const categories = await Category.find();
+        console.log(categories);
         return NextResponse.json(categories);
     } catch (error) {
         return NextResponse.json({ message: 'Error fetching products' }, { status: 500 });
@@ -24,13 +27,8 @@ export async function POST(req: NextRequest) {
 
     try {
         await mongooseConnect();
-        const category: Category = await req.json();
-        if (category.parent)
-            category.parent = new mongoose.Types.ObjectId(category.parent);
-
-        const newCategory: HydratedDocument<Category> = new Category(category);
-        await newCategory.save();
-        await newCategory.populate({ path: 'parent', model: Category});
+        const { name, parent } = await req.json();
+        const newCategory: ICategoryDocument = await Category.create({ name, parent });
         return NextResponse.json(newCategory);
     } catch (error) {
         return NextResponse.json({ message: error.message }, { status: 500 });
@@ -46,8 +44,7 @@ export async function PATCH(req: NextRequest) {
     try {
         await mongooseConnect();
         const category: Category = await req.json();
-        const updatedCategory: Category | null = await Category.findOneAndUpdate({ _id: category._id }, category, { returnDocument: 'after'})
-            .populate({ path: 'parent', model: Category }).exec();
+        const updatedCategory: ICategoryDocument | null = await Category.findOneAndUpdate({ _id: category._id }, category, { returnDocument: 'after'});
 
         if(!updatedCategory) throw Error("Couldn't find product in database");
         console.log(updatedCategory);

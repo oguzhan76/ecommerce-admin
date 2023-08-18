@@ -6,12 +6,12 @@ import CategoryParentDropdown from './CategoryParentDropdown';
 
 type Props = {
     categories: Category[],
-    onSave: (name: string, parentId: string | null) => void,
+    onSave: (name: string, parentId: string | undefined) => void,
 }
 
 export default function NewCategoryForm({ categories, onSave }: Props) {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [parentId, setParentId] = useState<string | null>(null);
+    const [parentId, setParentId] = useState<string | undefined>(undefined);
 
     async function saveNewCategory(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();

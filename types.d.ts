@@ -22,27 +22,13 @@ interface SelectableImage extends ImageType {
 
 // ----------------
 
-interface Category {
-    _id?: string,
-    name: string,
-    parent?: ObjectId,
-    children: ObjectId[]
-}
 
-interface Cat extends Category {
-    _id: string,
-    parent: Cat,
-}
-
-interface PopdCategoryDoc {
+interface Category{
     _id: string,
     name: string,
-    parent: PopdCategoryDoc
+    parent?: string
 }
 
-interface CategoryWithChildren extends PopdCategoryDoc {
-    children: string[] | undefined;
-  }
 // ----------------
 
 type OptionType = {

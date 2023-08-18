@@ -1,9 +1,10 @@
+import { PopulatedCategory } from '@/interfaces/ICategory';
 import React, { useState } from 'react';
 import Select from 'react-select';
 
 type Props = {
-    categories: Category[],
-    setParent: (c: string | null) => void,
+    categories: PopulatedCategory[],
+    setParent: (c: string | undefined) => void,
     defaultParentName?: string
 }
 
@@ -15,7 +16,7 @@ function CategoryParentDropdown({ categories, setParent, defaultParentName = 'No
 
     const handleOnChange = (selected: OptionType | null) => {
         setOption(selected);
-        setParent(selected?.value || null);
+        setParent(selected?.value);
     }
 
     return (
