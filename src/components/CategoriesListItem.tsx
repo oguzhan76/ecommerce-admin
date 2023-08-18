@@ -5,6 +5,20 @@ import axios from 'axios';
 import CategoryParentDropdown from './CategoryParentDropdown';
 import Dialog from './Dialog';
 
+const ARROW_DIM = 'w-4 h-4'
+const arrow = {
+    down: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={ARROW_DIM}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+        </svg>
+    ),
+    right: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={ARROW_DIM}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+    )
+}
+
 type Props = {
     item: Category,
     categories: Category[],
@@ -92,7 +106,7 @@ export default function CategoriesListItem({ item, categories, categoriesMap, su
                 <>
                     <div key={item._id} className='rounded-lg bg-slate-200 px-2 inline-flex justify-between h-10 items-center'>
                         <div className='flex'>
-                            <button className='bg-none pr-4' onClick={() => setShowSubs(prev => !prev)}>{showSubs ? 'v' : '>'}</button>
+                            <button className='bg-none pr-4' onClick={() => setShowSubs(prev => !prev)}>{showSubs ? arrow.down : arrow.right}</button>
                             <p className='w-96'>{item.name}</p>
                             {/* {item.parent && <p className='text-start'>{categoriesMap.get(item.parent)?.name}</p>} */}
                         </div>
