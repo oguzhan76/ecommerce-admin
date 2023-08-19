@@ -35,3 +35,6 @@ type OptionType = {
     value: string,
     label: string
 }
+
+type CategoriesMapValue = { self: Category, subs: string[] }
+type CategoriesMap = Map<string, CategoriesMapValue>

@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useRef, FormEvent, useMemo } from 'react';
+import { useState, useRef, FormEvent, useMemo, useEffect } from 'react';
 import axios from 'axios';
 import CategoryParentDropdown from './CategoryParentDropdown';
 import Dialog from './Dialog';
+import useMappedCategories from '@/hooks/useMappedCategories';
 
 const ARROW_DIM = 'w-4 h-4'
 const arrow = {
@@ -22,24 +23,27 @@ const arrow = {
 type Props = {
     item: Category,
     categories: Category[],
-    categoriesMap: Map<string, Category>,
-    subsMap: Map<string, string[]>,
+    categoriesMap: CategoriesMap,
+    expanded: Boolean,
+    isDescendant: (i: string, p: string) => Boolean
     onEdit: (cat: Category) => void,
     onDelete: () => void
 };
 
-export default function CategoriesListItem({ item, categories, categoriesMap, subsMap, onEdit, onDelete }: Props) {
-    const [showSubs, setShowSubs] = useState<boolean>(true);
+export default function CategoriesListItem({ item, categories, categoriesMap, expanded, isDescendant, onEdit, onDelete }: Props) {
+    const [showSubs, setShowSubs] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const deleteDialogRef = useRef<HTMLDialogElement | null>(null);
     const [editing, setEditing] = useState<boolean>(false);
     const [newParentId, setNewParentId] = useState<string | undefined>(undefined);
 
+    useEffect(() => {ToggleSubs()}, [expanded])
+
     const subs: Category[] = useMemo<Category[]>(() => {
-        const childIds = subsMap.get(item._id);
+        const childIds = categoriesMap.get(item._id)?.subs;
         if (!childIds) return [];
-        return childIds.map(childId => categoriesMap.get(childId)!);
-    }, [subsMap, categoriesMap, item]);
+        return childIds.map(childId => categoriesMap.get(childId)!.self);
+    }, [categoriesMap, item]);
 
 
     async function saveEdit(e: FormEvent<HTMLFormElement>) {
@@ -72,6 +76,10 @@ export default function CategoriesListItem({ item, categories, categoriesMap, su
         deleteDialogRef.current?.showModal();
     }
 
+    function ToggleSubs() {
+        setShowSubs(prev => !prev);
+    }
+
     async function deleteItem() {
         try {
             const res = await axios.put('/api/categories', { _id: item._id });
@@ -83,18 +91,18 @@ export default function CategoriesListItem({ item, categories, categoriesMap, su
         }
     }
 
-    // check if parentCandidate is a child of item.
-    function isDescendant(itemId: string, parentCandidateId: string): boolean {
-        // if candidate has no parents than it can't be descendant
-        if(!categoriesMap.get(parentCandidateId)?.parent) return false;
+    // // check if parentCandidate is a child of item.
+    // function isDescendant(itemId: string, parentCandidateId: string): boolean {
+    //     // if candidate has no parents than it can't be descendant
+    //     if(!categoriesMap.get(parentCandidateId)?.self.parent) return false;
 
-        let currentParent = categoriesMap.get(parentCandidateId)?.parent;
-        while(currentParent){
-            if(currentParent === itemId) return true;
-            currentParent = categoriesMap.get(currentParent)?.parent;
-        }
-        return false;
-    }
+    //     let currentParent = categoriesMap.get(parentCandidateId)?.self.parent;
+    //     while(currentParent){
+    //         if(currentParent === itemId) return true;
+    //         currentParent = categoriesMap.get(currentParent)?.self.parent;
+    //     }
+    //     return false;
+    // }
 
     const editForm = (
         <div key={item._id} className='rounded-lg bg-slate-200 px-2 inline-flex justify-between h-16 items-center'>
@@ -115,7 +123,14 @@ export default function CategoriesListItem({ item, categories, categoriesMap, su
         <>
             <div key={item._id} className='rounded-lg bg-slate-200 px-2 inline-flex justify-between h-10 items-center'>
                 <div className='flex'>
-                    <button className='bg-none pr-4' onClick={() => setShowSubs(prev => !prev)}>{showSubs ? arrow.down : arrow.right}</button>
+                    {!!subs.length && (
+                        <button 
+                            className='bg-none pr-4 text-sky-600' 
+                            onClick={ToggleSubs}
+                        >
+                            {showSubs ? arrow.down : arrow.right}
+                        </button>)
+                    }
                     <p className='w-96'>{item.name}</p>
                 </div>
                 <div className='flex flex-row gap-2'>
@@ -142,7 +157,8 @@ export default function CategoriesListItem({ item, categories, categoriesMap, su
                     item={item}
                     categories={categories}
                     categoriesMap={categoriesMap}
-                    subsMap={subsMap}
+                    expanded={expanded}
+                    isDescendant={isDescendant}
                     onEdit={onEdit}
                     onDelete={onDelete}
                 />)}

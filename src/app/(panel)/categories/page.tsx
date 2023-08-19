@@ -1,32 +1,16 @@
 'use client'
 
-import React, { useEffect, useState, useMemo } from 'react';
-import NewCategoryForm from '@/components/NewCategoryForm';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import NewCategoryForm from '@/components/NewCategoryForm';
 import CategoriesListItem from '@/components/CategoriesListItem';
+import useMappedCategories from '@/hooks/useMappedCategories';
 
 
 export default function CategoriesPage() {
     const [categories, setCategories] = useState<Category[]>([]);
-
-    // Map to all categories with their ids as key; and themselves as value. For optimizing searching.
-    const map: Map<string, Category> = useMemo(() => {
-        return new Map<string, Category>(categories.map(item => { return [item._id, item] }));
-    }, [categories]);
-
-    // A Map that has all the parent categories ids as a key and array of ids of their children as value
-    // Categories with no children are excluded
-    const subsMap: Map<string, string[]> = useMemo(() => {
-        const subsMap = new Map<string, Array<string>>(categories.filter(item => !!item.parent)
-            .map(item => {
-                return [item.parent!, []];
-            })
-        );
-        categories.forEach(item => {
-            if (item.parent) subsMap.get(item.parent)?.push(item._id);
-        });
-        return subsMap;
-    }, [categories]);
+    const [expanded, setExpanded] = useState<Boolean>(false);
+    const {categoriesMap, isDescendant} = useMappedCategories(categories);
 
     useEffect(() => {
         fetchCategories();
@@ -60,16 +44,17 @@ export default function CategoriesPage() {
             <section>
                 <div className='p-0 bottomline flex'>
                     <h3 className='w-96'>Category Name</h3>
-                    {/* <h3>Parent Category</h3> */}
                 </div>
                 <div className='flex flex-col gap-1 mt-2'>
+                    <button className='btn-default' onClick={() => setExpanded(prev => !prev)}>Expand</button>
                     {categories.map(item => !item.parent && (
                         <CategoriesListItem
                             key={item._id}
                             item={item}
                             categories={categories}
-                            categoriesMap={map}
-                            subsMap={subsMap}
+                            categoriesMap={categoriesMap}
+                            expanded={expanded}
+                            isDescendant={isDescendant}
                             onEdit={onEditAnItem}
                             onDelete={fetchCategories}
                         />
