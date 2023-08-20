@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 
+type OptionType = {
+    value: string,
+    label: string
+}
+
 type Props = {
     categories: Category[],
     setParent: (c: string | undefined) => void,

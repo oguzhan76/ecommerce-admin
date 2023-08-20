@@ -37,12 +37,12 @@ export default function Dialog({
     }
     return (
         <>
-            <dialog ref={dialogRef} onCancel={cancel} className='rounded-lg shadow-2xl backdrop:bg-cyan-900/30 p-0'>
+            <dialog ref={dialogRef} onCancel={cancel} className='rounded-lg shadow-2xl backdrop:bg-cyan-900/30 p-0 min-w-fit'>
                 <div>
                     {title && <div className='text-center text-white bg-red-600 p-1'>
                         {title}
                     </div>}
-                    <div className='text-center p-2 pb-0'>
+                    <div className='text-center p-2 pb-0 min-w-fit'>
                         {children}
                     </div>
                     <div className='flex gap-2 justify-center p-2'>

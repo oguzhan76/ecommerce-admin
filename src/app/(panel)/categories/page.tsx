@@ -10,7 +10,7 @@ import useMappedCategories from '@/hooks/useMappedCategories';
 export default function CategoriesPage() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [expanded, setExpanded] = useState<Boolean>(false);
-    const {categoriesMap, isDescendant} = useMappedCategories(categories);
+    const {categoriesMap, isDescendant, getAllDescendantsOf } = useMappedCategories(categories);
 
     useEffect(() => {
         fetchCategories();
@@ -29,6 +29,7 @@ export default function CategoriesPage() {
     async function onCreateNew(name: string, parentId: string | undefined) {
         try {
             const newCat = { name, parent: parentId };
+            console.log('parent', parentId);
             await axios.post('/api/categories', newCat);
             fetchCategories();
         } catch (error) {
@@ -40,13 +41,13 @@ export default function CategoriesPage() {
     return (
         <>
             <h1>Categories</h1>
-            <NewCategoryForm categories={categories} onSave={onCreateNew} />
+            <NewCategoryForm categories={categories} onSave={onCreateNew}/>
             <section>
                 <div className='p-0 bottomline flex'>
                     <h3 className='w-96'>Category Name</h3>
                 </div>
                 <div className='flex flex-col gap-1 mt-2'>
-                    <button className='btn-default' onClick={() => setExpanded(prev => !prev)}>Expand</button>
+                    <button className='bg-none underline w-24 text-sm' onClick={() => setExpanded(prev => !prev)}>{expanded ? 'Collapse all' : 'Expand All'}</button>
                     {categories.map(item => !item.parent && (
                         <CategoriesListItem
                             key={item._id}
@@ -55,6 +56,7 @@ export default function CategoriesPage() {
                             categoriesMap={categoriesMap}
                             expanded={expanded}
                             isDescendant={isDescendant}
+                            getAllDescendantsOf={getAllDescendantsOf}
                             onEdit={onEditAnItem}
                             onDelete={fetchCategories}
                         />

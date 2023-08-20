@@ -54,18 +54,21 @@ export async function PATCH(req: NextRequest) {
     }
 }
 
-// Delete
+// Delete many
 export async function PUT(req: NextRequest) {
     const session = await getServerSession(AuthOptions);
     if(!session)
-        return NextResponse.json({ message: 'NotAuthorized' }, { status: 401 });
+        return NextResponse.json({ message: 'Not Authorized' }, { status: 401 });
 
     await mongooseConnect();
     try {
-        const _id = await req.json();
-        const deletedCat = await Category.findOneAndDelete({ _id });
-        console.log('deleted', deletedCat);
-        if(!deletedCat) throw Error("Couldn't find category with this id");
+        const { ids }: { ids: string[] } = await req.json();
+        console.log(ids);
+        const res = await Category.deleteMany({ _id: { $in: ids }});
+        if(res.deletedCount !== ids.length)
+            throw Error('Some categories may not be deleted');
+
+        console.log('deleted', res.deletedCount);
         return NextResponse.json("Deleted Successfully");
     } catch (error) {
         return NextResponse.json({ message: error.message }, { status: 500 });

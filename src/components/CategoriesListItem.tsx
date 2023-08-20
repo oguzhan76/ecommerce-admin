@@ -4,7 +4,6 @@ import { useState, useRef, FormEvent, useMemo, useEffect } from 'react';
 import axios from 'axios';
 import CategoryParentDropdown from './CategoryParentDropdown';
 import Dialog from './Dialog';
-import useMappedCategories from '@/hooks/useMappedCategories';
 
 const ARROW_DIM = 'w-4 h-4'
 const arrow = {
@@ -25,19 +24,23 @@ type Props = {
     categories: Category[],
     categoriesMap: CategoriesMap,
     expanded: Boolean,
-    isDescendant: (i: string, p: string) => Boolean
+    isDescendant: (item: string, parent: string) => Boolean
+    getAllDescendantsOf: (item: string) => string[]
     onEdit: (cat: Category) => void,
     onDelete: () => void
 };
 
-export default function CategoriesListItem({ item, categories, categoriesMap, expanded, isDescendant, onEdit, onDelete }: Props) {
-    const [showSubs, setShowSubs] = useState<boolean>(false);
+export default function CategoriesListItem({ item, categories, categoriesMap, expanded, isDescendant, getAllDescendantsOf, onEdit, onDelete }: Props) {
+    const [showSubs, setShowSubs] = useState<Boolean>(expanded);
     const inputRef = useRef<HTMLInputElement>(null);
     const deleteDialogRef = useRef<HTMLDialogElement | null>(null);
     const [editing, setEditing] = useState<boolean>(false);
     const [newParentId, setNewParentId] = useState<string | undefined>(undefined);
+    const [deleteSubs, setDeleteSubs] = useState<Boolean>(false);
 
-    useEffect(() => {ToggleSubs()}, [expanded])
+    useEffect(() => {
+        setShowSubs(expanded);
+    }, [expanded]);
 
     const subs: Category[] = useMemo<Category[]>(() => {
         const childIds = categoriesMap.get(item._id)?.subs;
@@ -45,26 +48,23 @@ export default function CategoriesListItem({ item, categories, categoriesMap, ex
         return childIds.map(childId => categoriesMap.get(childId)!.self);
     }, [categoriesMap, item]);
 
-
     async function saveEdit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
+        if (!newParentId) {
+            if (item.name === inputRef.current?.value)
+                return setEditing(false);
+        }
 
         const editedCategory: Category = {
             _id: item._id,
             name: inputRef.current?.value || '',
             parent: newParentId || item.parent,
         }
+
         try {
-            if (!newParentId) {
-                if (item.name === inputRef.current?.value) return setEditing(false);
-                const editedCategory: Category = {
-                    ...item,
-                    name: inputRef.current?.value || '',
-                }
-            }
             const res = await axios.patch('/api/categories', editedCategory);
             setEditing(false);
-            // const cat = { ...res.data, parent: }
             onEdit(res.data);
             setNewParentId(undefined);
         } catch (error) {
@@ -72,37 +72,27 @@ export default function CategoriesListItem({ item, categories, categoriesMap, ex
         }
     }
 
-    function showDialog() {
-        deleteDialogRef.current?.showModal();
-    }
-
-    function ToggleSubs() {
-        setShowSubs(prev => !prev);
-    }
-
     async function deleteItem() {
         try {
-            const res = await axios.put('/api/categories', { _id: item._id });
-            if (res.status === 200) {
-                onDelete();
+            if(deleteSubs) {
+                const subsToRemove = getAllDescendantsOf(item._id);
+                subsToRemove.push(item._id);
+                console.log(subsToRemove);
+                const res = await axios.put('/api/categories', { ids: subsToRemove});
             }
+            // const res = await axios.put('/api/categories', { _id: item._id });
+            // if (res.status === 200) {
+            //     onDelete();
+            // }
         } catch (error) {
+            console.log(error);
             alert(`Error! ${error.message}`);
         }
     }
 
-    // // check if parentCandidate is a child of item.
-    // function isDescendant(itemId: string, parentCandidateId: string): boolean {
-    //     // if candidate has no parents than it can't be descendant
-    //     if(!categoriesMap.get(parentCandidateId)?.self.parent) return false;
-
-    //     let currentParent = categoriesMap.get(parentCandidateId)?.self.parent;
-    //     while(currentParent){
-    //         if(currentParent === itemId) return true;
-    //         currentParent = categoriesMap.get(currentParent)?.self.parent;
-    //     }
-    //     return false;
-    // }
+    function showDialog() {
+        deleteDialogRef.current?.showModal();
+    }
 
     const editForm = (
         <div key={item._id} className='rounded-lg bg-slate-200 px-2 inline-flex justify-between h-16 items-center'>
@@ -124,11 +114,11 @@ export default function CategoriesListItem({ item, categories, categoriesMap, ex
             <div key={item._id} className='rounded-lg bg-slate-200 px-2 inline-flex justify-between h-10 items-center'>
                 <div className='flex'>
                     {!!subs.length && (
-                        <button 
-                            className='bg-none pr-4 text-sky-600' 
-                            onClick={ToggleSubs}
+                        <button
+                            className='bg-none pr-4 text-sky-600'
+                            onClick={() => setShowSubs(prev => !prev)}
                         >
-                            {showSubs ? arrow.down : arrow.right}
+                            {showSubs ? arrow.right : arrow.down}
                         </button>)
                     }
                     <p className='w-96'>{item.name}</p>
@@ -159,6 +149,7 @@ export default function CategoriesListItem({ item, categories, categoriesMap, ex
                     categoriesMap={categoriesMap}
                     expanded={expanded}
                     isDescendant={isDescendant}
+                    getAllDescendantsOf={getAllDescendantsOf}
                     onEdit={onEdit}
                     onDelete={onDelete}
                 />)}
@@ -173,10 +164,13 @@ export default function CategoriesListItem({ item, categories, categoriesMap, ex
                 onAccept={deleteItem}
             >
                 <p>{`Deleting category '${item.name}'.`}</p>
-                <p>{`Any children category will no longer reference this!`}</p>
+                <div className='my-4 flex'>
+                    <input type='checkbox' id='checkboxId' className='w-4 mx-2 align-middle' onChange={(c) => setDeleteSubs(c.target.checked)}/>
+                    <label htmlFor='checkboxId' className='m-0'>Delete all subcategories, too</label>
+                </div>
             </Dialog>
-            { editing ? editForm : listItem}
-            { (showSubs && !!subs.length) && subsList }
+            {editing ? editForm : listItem}
+            {(showSubs && !!subs.length) && subsList}
 
         </>
     )
