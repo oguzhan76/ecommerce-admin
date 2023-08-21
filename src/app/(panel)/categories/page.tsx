@@ -1,16 +1,14 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import NewCategoryForm from '@/components/NewCategoryForm';
 import CategoriesListItem from '@/components/CategoriesListItem';
-import useMappedCategories from '@/hooks/useMappedCategories';
+import { useCategoriesContext} from '@/contexts/CategoriesContext';
 
 
 export default function CategoriesPage() {
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [expanded, setExpanded] = useState<boolean>(false);
-    const {categoriesMap, isDescendant, getAllDescendantsOf } = useMappedCategories(categories);
+    const {categories, setCategories, listExpanded, setListExpanded } = useCategoriesContext();
 
     useEffect(() => {
         fetchCategories();
@@ -22,16 +20,15 @@ export default function CategoriesPage() {
         console.log(res.data);
     }
 
-    function onEditAnItem(cat: Category) {
-        const updatedCategories: Category[] = categories.map(item => item._id === cat._id ? cat : item);
+    function onEditAnItem(editedCategory: Category) {
+        const updatedCategories: Category[] = categories.map(item => item._id === editedCategory._id ? editedCategory : item);
         setCategories(updatedCategories);
     }
 
     async function onCreateNew(name: string, parentId: string | undefined) {
         try {
-            const newCat = { name, parent: parentId };
-            console.log('parent', parentId);
-            await axios.post('/api/categories', newCat);
+            const newCategory = { name, parent: parentId };
+            await axios.post('/api/categories', newCategory);
             fetchCategories();
         } catch (error) {
             console.error(error.message);
@@ -48,14 +45,11 @@ export default function CategoriesPage() {
                     <h3 className='w-96'>Category Name</h3>
                 </div>
                 <div className='flex flex-col gap-1 mt-2'>
-                    <button className='bg-none underline w-24 text-sm' onClick={() => setExpanded(prev => !prev)}>{expanded ? 'Collapse all' : 'Expand All'}</button>
+                    <button className='bg-none underline w-24 text-sm' onClick={() => setListExpanded(prev => !prev)}>{listExpanded ? 'Collapse all' : 'Expand All'}</button>
                     {categories.map(item => !item.parent && (
                         <CategoriesListItem
                             key={item._id}
                             item={item}
-                            categories={categories}
-                            expanded={expanded}
-                            categoryMap={ { categoriesMap, isDescendant, getAllDescendantsOf } }
                             onEdit={onEditAnItem}
                             onDelete={fetchCategories}
                         />

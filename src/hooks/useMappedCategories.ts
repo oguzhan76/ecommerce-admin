@@ -8,15 +8,16 @@ export default function useMappedCategories(categories: Category[]) {
         categories.forEach(item => {
             if (item.parent) categoriesMap.get(item.parent)?.subs.push(item._id);
         });
+        console.log(categoriesMap);
         return categoriesMap;
     }, [categories]);
 
-    // Check if parentCandidate is a child of item.
-    function isDescendant(itemId: string, parentCandidateId: string): boolean {
-        // if candidate has no parents than it can't be descendant
-        if (!categoriesMap.get(parentCandidateId)?.self.parent) return false;
+    // Check if descendant is among subcategories of item.
+    function isDescendant(itemId: string, descendantId: string): boolean {
+        // if descandant has no parents than it can't be a descendant
+        if (!categoriesMap.get(descendantId)?.self.parent) return false;
 
-        let currentParent = categoriesMap.get(parentCandidateId)?.self.parent;
+        let currentParent = categoriesMap.get(descendantId)?.self.parent;
         while (currentParent) {
             if (currentParent === itemId) return true;
             currentParent = categoriesMap.get(currentParent)?.self.parent;

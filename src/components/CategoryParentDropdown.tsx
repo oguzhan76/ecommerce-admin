@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
+import { useCategoriesContext } from '@/contexts/CategoriesContext';
 
 type OptionType = {
     value: string,
@@ -7,15 +8,16 @@ type OptionType = {
 }
 
 type Props = {
-    categories: Category[],
+    categoriesToShow: Category[],
     setParent: (c: string | undefined) => void,
     defaultId?: string
 }
 
-function CategoryParentDropdown({ categories, setParent, defaultId = '' }: Props) {
+function CategoryParentDropdown({ categoriesToShow, setParent, defaultId = '' }: Props) {
+    // const { categories } = useCategoriesContext();
     const [option, setOption] = useState<OptionType | null>();
 
-    const Options: OptionType[] = categories.map(item => ({ value: item._id || '', label: item.name }));
+    const Options: OptionType[] = categoriesToShow.map(item => ({ value: item._id || '', label: item.name }));
     Options.unshift({ value: '', label: 'No Parent'});
 
     const handleOnChange = (selected: OptionType | null) => {

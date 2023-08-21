@@ -4,6 +4,7 @@ import { useState, useRef, FormEvent, useMemo, useEffect } from 'react';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import CategoryParentDropdown from './CategoryParentDropdown';
 import Dialog from './Dialog';
+import { useCategoriesContext } from '@/contexts/CategoriesContext';
 
 const ARROW_DIM = 'w-4 h-4'
 const arrow = {
@@ -21,26 +22,13 @@ const arrow = {
 
 type Props = {
     item: Category,
-    categories: Category[],
-    expanded: boolean,
-    categoryMap: { 
-        categoriesMap: CategoriesMap,
-        isDescendant: (itemId: string, parentCandidateId: string) => boolean, 
-        getAllDescendantsOf: (id: string) => string[] 
-    },
     onEdit: (cat: Category) => void,
     onDelete: () => void
 };
 
-export default function CategoriesListItem({ 
-    item, 
-    categories, 
-    expanded, 
-    categoryMap: { categoriesMap, isDescendant, getAllDescendantsOf }, 
-    onEdit, 
-    onDelete 
-}: Props) {
-    const [showSubs, setShowSubs] = useState<boolean>(expanded);
+export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
+    const { categories, listExpanded, categoriesMap, isDescendant, getAllDescendantsOf } = useCategoriesContext();
+    const [showSubs, setShowSubs] = useState<boolean>(listExpanded);
     const inputRef = useRef<HTMLInputElement>(null);
     const deleteDialogRef = useRef<HTMLDialogElement | null>(null);
     const [editing, setEditing] = useState<boolean>(false);
@@ -48,8 +36,8 @@ export default function CategoriesListItem({
     const [deleteSubs, setDeleteSubs] = useState<boolean>(false);
 
     useEffect(() => {
-        setShowSubs(expanded);
-    }, [expanded]);
+        setShowSubs(listExpanded);
+    }, [listExpanded]);
 
     const subs: Category[] = useMemo<Category[]>(() => {
         const childIds = categoriesMap.get(item._id)?.subs;
@@ -84,15 +72,15 @@ export default function CategoriesListItem({
     async function deleteItem() {
         try {
             if(deleteSubs) {
-                const subsToRemove = getAllDescendantsOf(item._id);
-                subsToRemove.push(item._id);
-                await axios.put('/api/categories', { ids: subsToRemove});
+                const itemsToRemove = getAllDescendantsOf(item._id);
+                itemsToRemove.push(item._id);
+                await axios.put('/api/categories', { ids: itemsToRemove});
             }
             else {
                 const res1 = axios.put(`/api/categories/${item._id}`);
                 // Shift all the subs parent to this item's parent
                 const res2 = axios.patch('/api/categories/shiftsubs', { id: item._id, newParent: item.parent });
-                const res: AxiosResponse[] = await Promise.all([res1, res2]);
+                await Promise.all([res1, res2]);
             }
             onDelete();
         } catch (error) {
@@ -112,7 +100,7 @@ export default function CategoriesListItem({
             <form onSubmit={saveEdit} className='flex gap-3'>
                 <input ref={inputRef} type='text' className='pl-1 w-72' defaultValue={item.name} autoFocus />
                 <CategoryParentDropdown
-                    categories={categories.filter(i => item._id !== i._id && !isDescendant(item._id, i._id))}
+                    categoriesToShow={categories.filter(i => item._id !== i._id && !isDescendant(item._id, i._id))}
                     setParent={setNewParentId}
                     defaultId={item.parent}
                 />
@@ -158,9 +146,6 @@ export default function CategoriesListItem({
                 <CategoriesListItem
                     key={item._id}
                     item={item}
-                    categories={categories}
-                    expanded={expanded}
-                    categoryMap={ { categoriesMap, isDescendant, getAllDescendantsOf} }
                     onEdit={onEdit}
                     onDelete={onDelete}
                 />)}
