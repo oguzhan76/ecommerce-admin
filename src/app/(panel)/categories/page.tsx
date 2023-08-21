@@ -9,7 +9,7 @@ import useMappedCategories from '@/hooks/useMappedCategories';
 
 export default function CategoriesPage() {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [expanded, setExpanded] = useState<Boolean>(false);
+    const [expanded, setExpanded] = useState<boolean>(false);
     const {categoriesMap, isDescendant, getAllDescendantsOf } = useMappedCategories(categories);
 
     useEffect(() => {
@@ -19,6 +19,7 @@ export default function CategoriesPage() {
     async function fetchCategories() {
         const res = await axios.get('/api/categories');
         setCategories(res.data);
+        console.log(res.data);
     }
 
     function onEditAnItem(cat: Category) {
@@ -53,10 +54,8 @@ export default function CategoriesPage() {
                             key={item._id}
                             item={item}
                             categories={categories}
-                            categoriesMap={categoriesMap}
                             expanded={expanded}
-                            isDescendant={isDescendant}
-                            getAllDescendantsOf={getAllDescendantsOf}
+                            categoryMap={ { categoriesMap, isDescendant, getAllDescendantsOf } }
                             onEdit={onEditAnItem}
                             onDelete={fetchCategories}
                         />

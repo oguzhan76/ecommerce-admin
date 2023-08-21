@@ -46,8 +46,7 @@ export async function PUT(req: NextRequest, { params: { id }}: Params) {
 
     await mongooseConnect();
     try {
-        const _id = await req.json();
-        const deletedCat = await Category.findOneAndDelete({ _id });
+        const deletedCat = await Category.findOneAndDelete({ _id: id });
         console.log('deleted', deletedCat);
         if(!deletedCat) throw Error("Couldn't find category with this id");
         return NextResponse.json("Deleted Successfully");
