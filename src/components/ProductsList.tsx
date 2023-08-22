@@ -34,7 +34,7 @@ export default function ProductsList() {
 
 // change select outline color, add defaultValue={sortOptions[0]} (which should be last added)
   return (
-    <div className='page-container mt-4'>
+    <section className='page-container mt-4'>
       <div className='mt-4 flex gap-3 '>
         <input type='text' onChange={(e) => handleSearch(e.target.value)}/>
         <SortDropdown products={products} returnSorted={handleSort}/>
@@ -48,6 +48,6 @@ export default function ProductsList() {
           <ProductItem key={product._id} product={product} />
         ))}
       </div>
-    </div>
+    </section>
   )
 }

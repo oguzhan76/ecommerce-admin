@@ -1,12 +1,12 @@
 import ProductsList from '@/components/ProductsList';
-import NewProductButton from '@/components/NewProductButton';
 import { Suspense, } from 'react';
 import Loading from './loading';
+import Link from 'next/link';
 
 export default function Products() {
     return (
         <>
-            <NewProductButton />
+            <Link href={'/products/new'} className='btn-primary'>Add Product</Link>
             <Suspense fallback={<Loading />}>
                 <ProductsList />
             </Suspense>
