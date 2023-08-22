@@ -30,9 +30,10 @@ function CategoryParentDropdown({ categoriesToShow, setParent, defaultId = '' }:
                 control: (baseStyles, state) => ({
                 ...baseStyles,
                 border: 'solid #ababab94 2px',
+                borderRadius: '6px',
                 boxShadow: 'none',
                 '&:hover': {
-                    border: 'solid red 2px',
+                    border: 'solid #8b8b8b94 2px',
                     boxShadow: 'none',
                     outline: 'none',
                 },

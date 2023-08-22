@@ -23,6 +23,11 @@ export default async function EditProductPage({ params: { id } }: Params) {
     if(!productInfo) return <div>Couldnt get any data</div>
 
     return (
-        <EditProduct productInfo={productInfo}/>
+        <>
+        <h1 className='pl-4'>Edit Product</h1>
+        <div className='page-container'>
+            <EditProduct productInfo={productInfo}/>
+        </div>
+        </>
     )
 }

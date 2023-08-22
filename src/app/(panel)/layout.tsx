@@ -23,7 +23,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <div className='bg-cyan-900 min-h-screen flex'>
       <Nav></Nav>
-      <div className='bg-white flex-grow mt-2 mr-2 mb-2 rounded-lg p-4'>
+      <div className='bg-pageBG flex-grow mt-2 mr-2 mb-2 rounded-lg p-4'>
         {/* <NextAuthProvider> */}
         {children}
         {/* </NextAuthProvider> */}

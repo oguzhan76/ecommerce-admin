@@ -42,10 +42,10 @@ export default function Dialog({
                     {title && <div className='text-center text-white bg-red-600 p-1'>
                         {title}
                     </div>}
-                    <div className='text-center p-2 pb-0 min-w-fit'>
+                    <div className='text-center pt-4 px-8 min-w-fit'>
                         {children}
                     </div>
-                    <div className='flex gap-2 justify-center p-2'>
+                    <div className='flex gap-2 justify-center p-2 mb-4'>
                         <button className='btn-primary' onClick={accept}>{acceptButtonText}</button>
                         {!noCancelButton && <button className='btn-primary' onClick={cancel}>{cancelButtonText || 'Cancel'}</button>}
                     </div>

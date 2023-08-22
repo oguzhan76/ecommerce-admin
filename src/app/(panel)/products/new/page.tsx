@@ -11,9 +11,9 @@ export default function NewProduct() {
         try {
             await axios.post('/api/products', productData);
         } catch (error) {
-            if(error.response.status >= 500)
+            if (error.response.status >= 500)
                 console.error(error.response.data.message);
-            else 
+            else
                 console.error('Network Error', error);
             alert('Error when creating product');
         }
@@ -22,8 +22,10 @@ export default function NewProduct() {
 
     return (
         <>
-            <h1>New Product</h1>
-            <ProductForm onSubmit={createProduct}/>
+            <h1 className='pl-4'>New Product</h1>
+            <div className='page-container '>
+                <ProductForm onSubmit={createProduct} />
+            </div>
         </>
     )
 }

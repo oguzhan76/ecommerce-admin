@@ -4,11 +4,11 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import NewCategoryForm from '@/components/NewCategoryForm';
 import CategoriesListItem from '@/components/CategoriesListItem';
-import { useCategoriesContext} from '@/contexts/CategoriesContext';
+import { useCategoriesContext } from '@/contexts/CategoriesContext';
 
 
 export default function CategoriesPage() {
-    const {categories, setCategories, listExpanded, setListExpanded } = useCategoriesContext();
+    const { categories, setCategories, listExpanded, setListExpanded } = useCategoriesContext();
 
     useEffect(() => {
         fetchCategories();
@@ -39,8 +39,10 @@ export default function CategoriesPage() {
     return (
         <>
             <h1>Categories</h1>
-            <NewCategoryForm categories={categories} onSave={onCreateNew}/>
-            <section>
+            <div className='bg-white rounded-lg p-4 mb-4'>
+                <NewCategoryForm categories={categories} onSave={onCreateNew} />
+            </div>
+            <section className='bg-white rounded-lg p-4'>
                 <div className='p-0 bottomline flex'>
                     <h3 className='w-96'>Category Name</h3>
                 </div>

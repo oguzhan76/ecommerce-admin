@@ -82,6 +82,7 @@ export default function ProductForm({ onSubmit, productInfo }: Props) {
             <form onSubmit={handleSubmit} className='flex flex-col'>
                 <label>Product Name</label>
                 <input
+                    className='h-10'
                     type='text'
                     placeholder='product name'
                     value={title}
@@ -120,12 +121,13 @@ export default function ProductForm({ onSubmit, productInfo }: Props) {
                 />
                 <label>Price (in USD)</label>
                 <input
+                    className='h-10'
                     type='text'
                     placeholder='price'
                     value={price}
                     onChange={e => setPrice(e.target.value)}
                 />
-                <div className='flex justify-between'>
+                <div className='flex justify-between mt-4'>
                     <Link href={"/products"} className='btn-primary mt-2'>{'<Back'}</Link>
                     <button type='submit' className='btn-primary mt-2'>Save</button>
                 </div>

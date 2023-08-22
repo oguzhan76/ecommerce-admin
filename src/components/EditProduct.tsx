@@ -12,7 +12,7 @@ export default function EditProduct({ productInfo }: { productInfo: ProductDoc }
         try {
             await axios.patch('/api/products', productData);
         } catch (error) {
-            if(error.response.status >= 500)   
+            if (error.response.status >= 500)
                 console.error(error.response.data.message, error);
             else console.error('Network Error when editing', error);
             alert('Error when editing product');
@@ -22,7 +22,6 @@ export default function EditProduct({ productInfo }: { productInfo: ProductDoc }
 
     return (
         <>
-            <h1>Edit Product</h1>
             {
                 productInfo &&
                 <ProductForm onSubmit={editProduct} productInfo={productInfo} />

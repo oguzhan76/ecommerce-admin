@@ -95,11 +95,8 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
         deleteDialogRef.current?.showModal();
     }
 
-    // const listStyle = "rounded-lg bg-slate-200 px-2 inline-flex justify-between items-center";
-    const listStyle = "inline-flex justify-between items-center border-b-2 border-cyan-100"
-
     const editForm = (
-        <div key={item._id} className={`${listStyle} h-16`}>
+        <div key={item._id} className='list-item h-16'>
             <form onSubmit={saveEdit} className='flex gap-3'>
                 <input ref={inputRef} type='text' className='pl-1 w-72 input-border' defaultValue={item.name} autoFocus />
                 <CategoryParentDropdown
@@ -113,9 +110,11 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
         </div>
     )
 
+    const listIndent = !!subs.length ? '' : 'pl-8'
+    
     const listItem = (
         <>
-            <div key={item._id} className={`${listStyle} h-10`}>
+            <div key={item._id} className={`list-item h-10 ${listIndent}`}>
                 <div className='flex'>
                     {!!subs.length && (
                         <button
@@ -162,10 +161,10 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
                 title='Are you sure?'
                 onAccept={deleteItem}
             >
-                <p>{`Deleting category '${item.name}'.`}</p>
+                <p>Deleting category &apos;<span className='italic'>{`${item.name}`}</span>&apos; !</p>
                 <div className='my-4 flex'>
                     <input type='checkbox' id='checkboxId' className='w-4 mx-2 align-middle' onChange={(c) => setDeleteSubs(c.target.checked)}/>
-                    <label htmlFor='checkboxId' className='m-0'>Delete all subcategories, too</label>
+                    <label htmlFor='checkboxId' className='m-0'>Delete subcategories</label>
                 </div>
             </Dialog>
             {editing ? editForm : listItem}

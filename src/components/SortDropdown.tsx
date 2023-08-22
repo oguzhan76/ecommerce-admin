@@ -43,6 +43,24 @@ function SortDropdown({ products, returnSorted }: Props) {
 
     return (
         <Select
+            styles={{
+                control: (baseStyles, state) => ({
+                ...baseStyles,
+                border: 'solid #ababab94 2px',
+                borderRadius: '6px',
+                boxShadow: 'none',
+                '&:hover': {
+                    border: 'solid #8b8b8b94 2px',
+                    boxShadow: 'none',
+                    outline: 'none',
+                },
+                '&:focus-within': {
+                    border: 'solid rgb(14 116 144) 2px',
+                    boxShadow: 'none',
+                    outline: 'none',
+                }
+                }),
+            }}
             className='w-44'
             options={sortOptions}
             value={sort}

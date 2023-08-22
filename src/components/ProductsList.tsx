@@ -34,38 +34,20 @@ export default function ProductsList() {
 
 // change select outline color, add defaultValue={sortOptions[0]} (which should be last added)
   return (
-    <>
-      <div className='mt-4 flex gap-3'>
+    <div className='page-container mt-4'>
+      <div className='mt-4 flex gap-3 '>
         <input type='text' onChange={(e) => handleSearch(e.target.value)}/>
         <SortDropdown products={products} returnSorted={handleSort}/>
       </div>
       <div className='flex bottomline gap-2 mt-4'>
-        <p className='w-[675px]'>Product Name</p>
-        <p className='w-32'>Price</p>
+        <p className='grow-[60]'>Product Name</p>
+        <p className='grow-[30]'>Price</p>
       </div>
       <div className='flex flex-col gap-1 mt-2'>
         {displayedProducts.map(product => (
           <ProductItem key={product._id} product={product} />
         ))}
       </div>
-    </>
-  )
-
-  return (
-    <>
-      <table className='basic mt-2'>
-        <thead>
-          <tr>
-            <td>Product name</td>
-            <td></td>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map(product => (
-            <ProductItem key={product._id} product={product} />
-          ))}
-        </tbody>
-      </table>
-    </>
+    </div>
   )
 }
