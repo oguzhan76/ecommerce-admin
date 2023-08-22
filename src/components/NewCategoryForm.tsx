@@ -35,7 +35,7 @@ export default function NewCategoryForm({ categories, onSave }: Props) {
                 </div>
             }
             <form onSubmit={saveNewCategory} className='flex gap-3 mb-4'>
-                <input ref={inputRef} type='text' className='pl-1 w-72' autoFocus />
+                <input ref={inputRef} type='text' className='pl-1 w-72 input-border' autoFocus />
                 <CategoryParentDropdown categoriesToShow={categories} setParent={setParentId} />
                 <button type='submit' className='btn-primary'>Save</button>
             </form>

@@ -2,24 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply text-cyan-800 font-medium
+}
+
 input, textarea {
   @apply border-2 border-gray-300 rounded-md px-1 w-full;
 }
 
 input:focus, textarea:focus {
-  @apply border-blue-500 outline-none;
+  @apply border-cyan-700 outline-none;
+}
+
+.input-border {
+  border: solid #ababab94 2px;
+  border-radius: 4px;
+  box-shadow: none;
 }
 
 h1 {
-  @apply text-cyan-900 mb-2 text-lg;
+  @apply  mb-2 text-lg;
 }
 
 label {
-  @apply text-cyan-900 mt-2;
+  @apply  mt-2;
 }
 
 .btn-primary {
-  @apply bg-cyan-900 text-white px-4 py-1 rounded-md focus-visible:outline-none;
+  /* @apply bg-cyan-900 text-white px-4 py-1 rounded-md focus-visible:outline-none; */
+  @apply bg-white border-cyan-500 border-2 px-4 py-1 focus-visible:outline-cyan-700; 
+  @apply rounded-md hover:shadow-md hover:-translate-y-1 focus:bg-cyan-100 border-cyan-700;
 }
 
 .btn-default, .btn-red {

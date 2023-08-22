@@ -95,10 +95,13 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
         deleteDialogRef.current?.showModal();
     }
 
+    // const listStyle = "rounded-lg bg-slate-200 px-2 inline-flex justify-between items-center";
+    const listStyle = "inline-flex justify-between items-center border-b-2 border-cyan-100"
+
     const editForm = (
-        <div key={item._id} className='rounded-lg bg-slate-200 px-2 inline-flex justify-between h-16 items-center'>
+        <div key={item._id} className={`${listStyle} h-16`}>
             <form onSubmit={saveEdit} className='flex gap-3'>
-                <input ref={inputRef} type='text' className='pl-1 w-72' defaultValue={item.name} autoFocus />
+                <input ref={inputRef} type='text' className='pl-1 w-72 input-border' defaultValue={item.name} autoFocus />
                 <CategoryParentDropdown
                     categoriesToShow={categories.filter(i => item._id !== i._id && !isDescendant(item._id, i._id))}
                     setParent={setNewParentId}
@@ -112,7 +115,7 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
 
     const listItem = (
         <>
-            <div key={item._id} className='rounded-lg bg-slate-200 px-2 inline-flex justify-between h-10 items-center'>
+            <div key={item._id} className={`${listStyle} h-10`}>
                 <div className='flex'>
                     {!!subs.length && (
                         <button
@@ -141,7 +144,7 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
     )
 
     const subsList = (
-        <div className='pl-6 flex flex-col gap-1 border-l-2 border-dotted'>
+        <div className='pl-6 flex flex-col gap-1 border-l-2 border-dotted border-cyan-100'>
             {subs.map(item =>
                 <CategoriesListItem
                     key={item._id}
