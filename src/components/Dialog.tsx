@@ -46,8 +46,8 @@ export default function Dialog({
                         {children}
                     </div>
                     <div className='flex gap-2 justify-center p-2 mb-4'>
-                        <button className='btn-primary' onClick={accept}>{acceptButtonText}</button>
-                        {!noCancelButton && <button className='btn-primary' onClick={cancel}>{cancelButtonText || 'Cancel'}</button>}
+                        <button className='btn btn-primary' onClick={accept}>{acceptButtonText}</button>
+                        {!noCancelButton && <button className='btn btn-primary' onClick={cancel}>{cancelButtonText || 'Cancel'}</button>}
                     </div>
                 </div>
             </dialog>

@@ -2,6 +2,14 @@
 import { Schema, model, models } from "mongoose";
 import { ICategory, ICategoryDocument, ICategoryModel } from "@/interfaces/ICategory";
 
+const PropertySchema: Schema<Property> = new Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    values: [String]
+}, { _id: false });
+
 const CategorySchema: Schema<ICategoryDocument> = new Schema({
     name: {
         type: String,
@@ -9,7 +17,8 @@ const CategorySchema: Schema<ICategoryDocument> = new Schema({
     },
     parent: {
         type: Schema.Types.ObjectId
-    }
+    },
+    properties: [PropertySchema]
 });
 
 CategorySchema.statics.buildCategory = (args: ICategory): ICategoryDocument => {

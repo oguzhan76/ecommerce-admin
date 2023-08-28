@@ -5,9 +5,6 @@
 body {
   @apply text-cyan-800 font-medium
 }
-.anan {
-  background-color: rgb(227, 247, 248);
-}
 
 input, textarea {
   @apply border-2 border-gray-300 rounded-md px-1 w-full;
@@ -15,6 +12,10 @@ input, textarea {
 
 textarea {
   @apply h-16;
+}
+
+.text-error{
+  @apply text-sm italic text-red-400 font-semibold;
 }
 
 input:focus, textarea:focus {
@@ -27,12 +28,18 @@ input:focus, textarea:focus {
 
 
 h1 {
-  @apply  mb-2 text-lg;
+  @apply text-2xl mb-2;
 }
 
-label {
-  @apply  mt-2;
+h2 {
+  @apply text-xl mb-2;
 }
+
+h3 {
+  @apply text-lg mb-1;
+}
+
+
 
 .page-container {
   @apply bg-white rounded-lg p-4;
@@ -43,9 +50,17 @@ label {
   /* @apply rounded-lg bg-slate-200 px-2 inline-flex justify-between items-center */
 }
 
+.btn {
+  @apply bg-white border-cyan-600 border-2 focus-visible:outline-cyan-700 hover:shadow-md;
+  @apply hover:border-cyan-400 hover:text-cyan-400 focus:bg-cyan-100 hover:-translate-y-[1px];
+}
+
 .btn-primary {
-  @apply bg-white border-cyan-600 border-2 px-4 py-1 focus-visible:outline-cyan-700; 
-  @apply rounded-md hover:shadow-md hover:border-cyan-400 hover:text-cyan-400 focus:bg-cyan-100 hover:-translate-y-[1px];
+  @apply px-4 py-1 rounded-md;
+}
+
+.btn-small {
+  @apply border-[2px] rounded;
 }
 
 .btn-default, .btn-red {
@@ -62,7 +77,7 @@ label {
 
 
 .bottomline {
-  @apply border-b-2 border-cyan-900 border-opacity-25;
+  @apply mb-3 pb-1 border-b-2 border-cyan-900 border-opacity-25;
 }
 /* :root {
   --foreground-rgb: 0, 0, 0;

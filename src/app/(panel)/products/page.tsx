@@ -6,7 +6,7 @@ import Link from 'next/link';
 export default function Products() {
     return (
         <>
-            <Link href={'/products/new'} className='btn-primary'>Add Product</Link>
+            <Link href={'/products/new'} className='btn btn-primary' autoFocus={false}>Add Product</Link>
             <Suspense fallback={<Loading />}>
                 <ProductsList />
             </Suspense>

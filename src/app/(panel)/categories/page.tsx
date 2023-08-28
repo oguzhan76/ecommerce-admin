@@ -25,10 +25,11 @@ export default function CategoriesPage() {
         setCategories(updatedCategories);
     }
 
-    async function onCreateNew(name: string, parentId: string | undefined) {
+    async function onCreateNew(newCategory: Category) {
         try {
-            const newCategory = { name, parent: parentId };
-            await axios.post('/api/categories', newCategory);
+            // const newCategory = { name, parent: parentId };
+            const res = await axios.post('/api/categories', newCategory);
+            console.log('created cat:', res.data);
             fetchCategories();
         } catch (error) {
             console.error(error.message);
@@ -38,8 +39,7 @@ export default function CategoriesPage() {
 
     return (
         <>
-            <h1>Categories</h1>
-            <div className='bg-white rounded-lg p-4 mb-4'>
+            <div className='page-container p-4 mb-4'>
                 <NewCategoryForm categories={categories} onSave={onCreateNew} />
             </div>
             <section className='bg-white rounded-lg p-4'>

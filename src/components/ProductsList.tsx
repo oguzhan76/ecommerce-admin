@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import ProductItem from './ProductItem';
 import SortDropdown from './SortDropdown';
 
@@ -36,12 +36,19 @@ export default function ProductsList() {
   return (
     <section className='page-container mt-4'>
       <div className='mt-4 flex gap-3 '>
-        <input type='text' onChange={(e) => handleSearch(e.target.value)}/>
+        <input 
+        type='text' 
+        onChange={(e) => handleSearch(e.target.value)} 
+        placeholder='Search'
+        autoFocus
+        />
         <SortDropdown products={products} returnSorted={handleSort}/>
       </div>
-      <div className='flex bottomline gap-2 mt-4'>
-        <p className='grow-[60]'>Product Name</p>
+      <div className='flex justify-start bottomline gap-2 mt-4'>
+        <p className='grow-[100]'>Product Name</p>
         <p className='grow-[30]'>Price</p>
+        {/* just to make it same with productlist; in stead of buttons*/}
+        <span className='w-32'></span>
       </div>
       <div className='flex flex-col gap-1 mt-2'>
         {displayedProducts.map(product => (

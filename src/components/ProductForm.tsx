@@ -80,56 +80,62 @@ export default function ProductForm({ onSubmit, productInfo }: Props) {
     return (
         <>
             <form onSubmit={handleSubmit} className='flex flex-col'>
-                <label>Product Name</label>
-                <input
-                    className='h-10'
-                    type='text'
-                    placeholder='product name'
-                    value={title}
-                    onChange={e => setTitle(e.target.value)}
-                />
-
-                <label>Photos</label>
-                {images.length
-                    ? <ImagesList images={images} setImages={setImages} deleteSelectedImages={deleteSelectedImages} />
-                    : <div className='text-sm text-red-500 italic'>No photos in this product</div>
-                }
-                <UploadDropzone
-                    endpoint='imageUploader'
-                    onClientUploadComplete={(res) => {
-                        if (res) {
-                            console.log('upload complete')
-                            setStagedImages(prev => prev.concat(res))
-                        };
-                    }}
-                    onUploadError={(err: Error) => console.log(err)}
-                />
-                {!!stagedImages.length &&
-                    <section>
-                        <div>
-                            <p className='mt-2' >{stagedImages.length} staged files</p>
-                        </div>
-                        <ImagesList images={stagedImages} setImages={setStagedImages} />
-                    </section>
-                }
-
-                <label>Description</label>
-                <textarea
-                    placeholder='description'
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
-                />
-                <label>Price (in USD)</label>
-                <input
-                    className='h-10'
-                    type='text'
-                    placeholder='price'
-                    value={price}
-                    onChange={e => setPrice(e.target.value)}
-                />
+                <section className='mt-2'>
+                    <label>Product Name</label>
+                    <input
+                        className='h-10'
+                        type='text'
+                        placeholder='Product name'
+                        value={title}
+                        onChange={e => setTitle(e.target.value)}
+                    />
+                </section>
+                <section className='mt-4'>
+                    <label>Photos</label>
+                    {images.length
+                        ? <ImagesList images={images} setImages={setImages} deleteSelectedImages={deleteSelectedImages} />
+                        : <div className='text-sm text-red-500 italic'>No photos in this product</div>
+                    }
+                    <UploadDropzone
+                        endpoint='imageUploader'
+                        onClientUploadComplete={(res) => {
+                            if (res) {
+                                console.log('upload complete')
+                                setStagedImages(prev => prev.concat(res))
+                            };
+                        }}
+                        onUploadError={(err: Error) => console.log(err)}
+                    />
+                    {!!stagedImages.length &&
+                        <section>
+                            <div>
+                                <p className='mt-2' >{stagedImages.length} staged files</p>
+                            </div>
+                            <ImagesList images={stagedImages} setImages={setStagedImages} />
+                        </section>
+                    }
+                </section>
+                <section className='mt-4'>
+                    <label>Description</label>
+                    <textarea
+                        placeholder='Description'
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                    />
+                </section>
+                <section className='mt-4'>
+                    <label>Price (in USD)</label>
+                    <input
+                        className='h-10'
+                        type='text'
+                        placeholder='Price'
+                        value={price}
+                        onChange={e => setPrice(e.target.value)}
+                    />
+                </section>
                 <div className='flex justify-between mt-4'>
-                    <Link href={"/products"} className='btn-primary mt-2'>{'<Back'}</Link>
-                    <button type='submit' className='btn-primary mt-2'>Save</button>
+                    <Link href={"/products"} className='btn btn-primary'>{'< Back'}</Link>
+                    <button type='submit' className='btn btn-primary'>Save</button>
                 </div>
             </form>
         </>

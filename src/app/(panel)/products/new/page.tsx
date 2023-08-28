@@ -22,7 +22,7 @@ export default function NewProduct() {
 
     return (
         <>
-            <h1 className='pl-4'>New Product</h1>
+            <h2 className='pl-4'>New Product</h2>
             <div className='page-container '>
                 <ProductForm onSubmit={createProduct} />
             </div>

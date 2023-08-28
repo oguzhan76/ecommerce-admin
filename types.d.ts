@@ -21,17 +21,19 @@ interface SelectableImage extends ImageType {
 }
 
 // ----------------
-
+interface Property {
+    name: string,
+    values: string[]
+}
 
 interface Category{
     _id: string,
     name: string,
-    parent?: string
+    parent?: string,
+    properties: Property[]
 }
 
 // ----------------
-
-
 
 type CategoriesMapValue = { self: Category, subs: string[] }
 type CategoriesMap = Map<string, CategoriesMapValue>
