@@ -66,9 +66,9 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
     function onEditProperties(editedProperty: Property): boolean {
         console.log('edited', editedProperty);
         console.log('props', editedProperties);
-        if(editedProperties.some(i => i.name === editedProperty.name))
+        if (editedProperties.some(i => i.name === editedProperty.name && i._id !== editedProperty._id))
             return false;
-        setEditedProperties(editedProperties.map(prop => prop._id === editedProperty._id ? editedProperty : prop ));
+        setEditedProperties(editedProperties.map(prop => prop._id === editedProperty._id ? editedProperty : prop));
         return true;
     }
 
@@ -184,9 +184,7 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
             {showProperties &&
                 <section className='pl-4 mb-2 bg-cyan-100/50 rounded-b-lg'>
                     {!!editedProperties.length && editedProperties.map(item => (
-                        <div key={item.name} className='flex items-center gap-5 h-fit min-h-8 '>
-                            <PropertyListItem property={item} allowEditing={editing} onEdit={onEditProperties} />
-                        </div>
+                        <PropertyListItem key={item._id} property={item} allowEditing={editing} onEdit={onEditProperties} />
                     ))}
                 </section>
             }
