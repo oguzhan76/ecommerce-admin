@@ -8,7 +8,7 @@ const PropertySchema: Schema<Property> = new Schema({
         required: true,
     },
     values: [String]
-}, { _id: false });
+});
 
 const CategorySchema: Schema<ICategoryDocument> = new Schema({
     name: {

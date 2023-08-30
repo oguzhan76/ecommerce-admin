@@ -12,7 +12,6 @@ export async function GET() {
     try {
         await mongooseConnect();
         const categories = await Category.find();
-        console.log(categories);
         return NextResponse.json(categories);
     } catch (error) {
         return NextResponse.json({ message: 'Error fetching products' }, { status: 500 });

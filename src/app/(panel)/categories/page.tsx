@@ -17,7 +17,6 @@ export default function CategoriesPage() {
     async function fetchCategories() {
         const res = await axios.get('/api/categories');
         setCategories(res.data);
-        console.log(res.data);
     }
 
     function onEditAnItem(editedCategory: Category) {
@@ -44,10 +43,20 @@ export default function CategoriesPage() {
             </div>
             <section className='bg-white rounded-lg p-4'>
                 <div className='p-0 bottomline flex'>
-                    <h3 className='w-96'>Category Name</h3>
+                    <button className='bg-none underline text-sm' onClick={() => setListExpanded(prev => !prev)}>
+                        {listExpanded ?
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5" />
+                            </svg>
+                            :
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 5.25l-7.5 7.5-7.5-7.5m15 6l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        }
+                    </button>
+                    <h3 className='w-96 pl-2'>Category Name</h3>
                 </div>
                 <div className='flex flex-col gap-1 mt-2'>
-                    <button className='bg-none underline w-24 text-sm' onClick={() => setListExpanded(prev => !prev)}>{listExpanded ? 'Collapse all' : 'Expand All'}</button>
                     {categories.map(item => !item.parent && (
                         <CategoriesListItem
                             key={item._id}
@@ -55,8 +64,7 @@ export default function CategoriesPage() {
                             onEdit={onEditAnItem}
                             onDelete={fetchCategories}
                         />
-                    ))
-                    }
+                    ))}
                 </div>
             </section>
         </>

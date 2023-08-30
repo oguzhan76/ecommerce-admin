@@ -22,6 +22,7 @@ interface SelectableImage extends ImageType {
 
 // ----------------
 interface Property {
+    _id?: string,
     name: string,
     values: string[]
 }

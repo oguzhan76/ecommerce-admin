@@ -48,8 +48,8 @@ export default function DeleteProductPage({ params: { id } }: Params) {
                 <>
                     <h1 className='text-center'>Are you sure about deleting product &apos;{productInfo.title}&apos; permanently?</h1>
                     <div className='flex gap-2 justify-center'>
-                        <button className='btn-red' onClick={deleteItem}>Yes</button>
-                        <button className='btn-default' onClick={() => router.replace('/products')}>No</button>
+                        <button className='btn btn-red' onClick={deleteItem}>Yes</button>
+                        <button className='btn btn-default' onClick={() => router.replace('/products')}>No</button>
                     </div>
                 </>}
         </>

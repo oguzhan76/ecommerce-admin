@@ -2,13 +2,8 @@
 
 import React, { useRef, useState, FormEvent } from 'react';
 import CategoryParentDropdown from './CategoryParentDropdown';
-import CategoryPropertiesList from './CategoryPropertiesList';
-
-
-// type ValidationError = {
-//     category: string | null,
-//     property: string | null,
-// }
+import PropertyForm from './PropertyForm';
+import PropertyListItem from './PropertyListItem';
 
 type Props = {
     categories: Category[],
@@ -17,12 +12,8 @@ type Props = {
 
 export default function NewCategoryForm({ categories, onSave }: Props) {
     const categoryNameRef = useRef<HTMLInputElement>(null);
-    const propertyNameRef = useRef<HTMLInputElement>(null);
-    const propertyValuesRef = useRef<HTMLInputElement>(null);
     const [parentId, setParentId] = useState<string | undefined>(undefined);
     const [CategoryError, setCategoryError] = useState<string>('');
-    const [propertyError, setPropertyError] = useState<string>('');
-    // const [validationError, setValidationError] = useState<ValidationError>({category: null, property: null});
     const [properties, setProperties] = useState<Property[]>([]);
 
     async function saveNewCategory(e: FormEvent<HTMLFormElement>) {
@@ -41,21 +32,17 @@ export default function NewCategoryForm({ categories, onSave }: Props) {
         setCategoryError('');
     }
 
-    function addNewProperty() {
-        if(!propertyNameRef.current?.value) 
-            return setPropertyError('A name should be provided for a new property');
-        if(!propertyValuesRef.current?.value)
-            return setPropertyError('Values should be provided for a new property');
-
-        const values: string[] = propertyValuesRef.current?.value.split(',');
-        setProperties([ ...properties, { name: propertyNameRef.current?.value, values }]);
-        propertyNameRef.current.value = '';
-        propertyValuesRef.current.value = '';
-        setPropertyError('');
+    function onAddProperty(property: Property): boolean {
+        if(properties.find(item => item.name === property.name))
+            return false;
+        else
+            setProperties(prev => ([ ...prev, property]));
+        return true;
     }
 
-    function handleEnterKey(e: React.KeyboardEvent<HTMLInputElement>) {
-        if(e.key === 'Enter') addNewProperty();
+    function onEditProperty(property: Property): boolean {
+        setProperties
+        return true;
     }
 
     return (
@@ -69,34 +56,21 @@ export default function NewCategoryForm({ categories, onSave }: Props) {
                         <p>* {CategoryError}</p>
                     </div>
                 }
-                <form onSubmit={saveNewCategory} className='flex gap-3 mb-4'>
+                <form onSubmit={saveNewCategory} className='flex flex-wrap gap-3 mb-4'>
                     <input ref={categoryNameRef} type='text' className='pl-1 w-72 input-border' placeholder='Category name' autoFocus />
                     <CategoryParentDropdown categoriesToShow={categories} setParent={setParentId} />
                     <button type='submit' className='btn btn-primary'>Save</button>
                 </form>
             </section>
             <section>
-                <h3>
-                    Properties<span>
-                        {/* <button 
-                            className='btn btn-small rounded leading-3 p-1 mx-2'
-                            onClick={createProperty}
-                        >+</button> */}
-                    </span>
-                </h3>
-                <CategoryPropertiesList properties={properties}/>
-                {propertyError && <p className='text-error'>* {propertyError}</p>}
-                <div className='inline-flex gap-2'>
-                    <input onKeyDown={handleEnterKey} ref={propertyNameRef} className='w-44' placeholder='Name'/>
-                    <input onKeyDown={handleEnterKey} ref={propertyValuesRef} className='w-96' placeholder='Values (Separate with comma, no space)'/>
-                    <button 
-                            className='btn btn-small rounded text-sm leading-3 p-1 mx-2 h-7'
-                            onClick={addNewProperty}
-                    >Add</button>
-                </div>
+                <h3>Properties</h3>
+                {!!properties.length && properties.map(item => (
+                        <div key={item.name} className='flex items-center gap-5 h-8 '>
+                            <PropertyListItem property={item} allowEditing onEdit={onEditProperty} />
+                        </div>
+                    ))}
+                <PropertyForm onSave={onAddProperty}/>
             </section>
         </>
     )
 }
-
-// e.key === 'Enter' ? addNewProperty() : null)

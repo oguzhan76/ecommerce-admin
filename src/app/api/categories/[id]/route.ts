@@ -24,14 +24,19 @@ export async function GET(req: NextRequest, { params: { id }}: Params ) {
     }
 }
 
-// Add sub to existing category
+// Update a category
 export async function PATCH(req: NextRequest, { params: { id }}: Params) {
+    const session = await getServerSession(AuthOptions);
+    if(!session)
+        return NextResponse.json({ message: 'Not Authorized' }, { status: 401 });
+
     try {
         await mongooseConnect();
-        const childToAdd = await req.json();
-        const result: UpdateResult = await Category.updateOne({ _id: id }, { $push: { children: childToAdd._id }});
-        if(!result.acknowledged)
-            throw Error('Error when updating parent');
+        const { name, values, properties } = await req.json();
+        console.log(name, values, properties);
+        const result: ICategoryDocument | null = await Category.findOneAndUpdate({ _id: id }, { name, values, properties });
+        if(!result)
+            throw Error('Error when updating category');
         return NextResponse.json(result);
     } catch (error) {
         return NextResponse.json({ message: error.message}, { status: 500 });

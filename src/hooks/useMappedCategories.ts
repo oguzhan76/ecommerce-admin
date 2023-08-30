@@ -8,7 +8,6 @@ export default function useMappedCategories(categories: Category[]) {
         categories.forEach(item => {
             if (item.parent) categoriesMap.get(item.parent)?.subs.push(item._id);
         });
-        console.log(categoriesMap);
         return categoriesMap;
     }, [categories]);
 
