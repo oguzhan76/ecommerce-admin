@@ -7,6 +7,7 @@ import Dialog from './Dialog';
 import { useCategoriesContext } from '@/contexts/CategoriesContext';
 import ExpandArrow from './ExpandArrow';
 import PropertyListItem from './PropertyListItem';
+import PropertyForm from './PropertyForm';
 
 type Props = {
     item: Category,
@@ -24,7 +25,7 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
     } = useCategoriesContext();
     const [showSubs, setShowSubs] = useState<boolean>(listExpanded);
     const [showProperties, setShowProperties] = useState<boolean>(false);
-    const categoryNameRef = useRef<HTMLInputElement>(null);
+    const categoryNameRef = useRef<HTMLInputElement | null>(null);
     const deleteDialogRef = useRef<HTMLDialogElement | null>(null);
     const [editing, setEditing] = useState<boolean>(false);
     const [newParentId, setNewParentId] = useState<string | undefined>(undefined);
@@ -64,11 +65,17 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
     }
 
     function onEditProperties(editedProperty: Property): boolean {
-        console.log('edited', editedProperty);
-        console.log('props', editedProperties);
-        if (editedProperties.some(i => i.name === editedProperty.name && i._id !== editedProperty._id))
+        // Check if the editedProperty has been named same with any other except itself
+        if (editedProperties.some(i => i._id !== editedProperty._id && i.name === editedProperty.name))
             return false;
         setEditedProperties(editedProperties.map(prop => prop._id === editedProperty._id ? editedProperty : prop));
+        return true;
+    }
+
+    function onAddNewProperty(newProperty: Property): boolean {
+        if (editedProperties.some(i => i.name === newProperty.name))
+            return false;
+        setEditedProperties([...editedProperties, newProperty]);
         return true;
     }
 
@@ -95,7 +102,8 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
     }
 
     function handleClickOnItem(e: React.MouseEvent<HTMLDivElement>) {
-        if ((e.target as HTMLElement).tagName === 'DIV')
+        const tag = (e.target as HTMLElement).tagName;
+        if (tag === 'DIV' || tag === 'P')
             setShowProperties(prev => !prev);
     }
 
@@ -105,6 +113,7 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
 
     function cancelEdit() {
         setEditing(false);
+        // Reset any changes made to properties state.
         setEditedProperties(item.properties);
     }
 
@@ -163,7 +172,8 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
                     item={item}
                     onEdit={onEdit}
                     onDelete={onDelete}
-                />)}
+                />
+            )}
         </div>
     )
 
@@ -184,8 +194,13 @@ export default function CategoriesListItem({ item, onEdit, onDelete }: Props) {
             {showProperties &&
                 <section className='pl-4 mb-2 bg-cyan-100/50 rounded-b-lg'>
                     {!!editedProperties.length && editedProperties.map(item => (
-                        <PropertyListItem key={item._id} property={item} allowEditing={editing} onEdit={onEditProperties} />
+                        <PropertyListItem key={item.name} property={item} allowEditing={editing} onEdit={onEditProperties} />
                     ))}
+                    {editing && 
+                        <div className='mb-2'>
+                            <PropertyForm onSave={onAddNewProperty} />
+                        </div>
+                    }
                 </section>
             }
             {(showSubs && !!subs.length) && subsList}

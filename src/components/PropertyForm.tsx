@@ -13,7 +13,7 @@ export default function PropertyForm({ onSave, onCancel, defaults = { name: '', 
     const [propertyError, setPropertyError] = useState<string>('');
 
 
-    function addNewProperty() {
+    function saveProperty() {
         if (!propertyNameRef.current?.value)
             return setPropertyError('A name should be provided for a new property');
         if (!propertyValuesRef.current?.value)
@@ -42,11 +42,11 @@ export default function PropertyForm({ onSave, onCancel, defaults = { name: '', 
     }
 
     function handleEnterKey(e: React.KeyboardEvent<HTMLInputElement>) {
-        if (e.key === 'Enter') addNewProperty();
+        if (e.key === 'Enter') saveProperty();
     }
 
     return (
-        <div className={propertyError ? '' : ''}>
+        <>
             {propertyError && <p className='text-error'>* {propertyError}</p>}
             <div className='flex flex-wrap gap-2'>
                 <input
@@ -65,7 +65,7 @@ export default function PropertyForm({ onSave, onCancel, defaults = { name: '', 
                 />
                 <button
                     className='btn btn-small rounded text-sm leading-3 p-1 mx-2 h-7'
-                    onClick={addNewProperty}
+                    onClick={saveProperty}
                 >
                     {editMode ? 'Save' : 'Add'}
                 </button>
@@ -77,6 +77,6 @@ export default function PropertyForm({ onSave, onCancel, defaults = { name: '', 
                     </button>
                 }
             </div>
-        </div>
+        </>
     )
 }

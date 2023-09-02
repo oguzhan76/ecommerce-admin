@@ -52,7 +52,6 @@ export default function PropertyListItem({ property, allowEditing = false, onEdi
                         i > 0 && ", ",
                         <span key={i} >{val}</span>])}
                     </p>
-                    {/* <PropertyForm onSave={onAddProperty}/> */}
                 </>
             }
 
